@@ -1,5 +1,4 @@
 module ALU #(
-
 )(
     input wire [15:0] in, // First operand
     input  wire [3:0]       op,   // Operation selector
@@ -9,10 +8,14 @@ module ALU #(
     output reg              busy
 );
     integer i;
-
+    wire [3:0] clz_count;
+    clz8 clz_inst (
+                .in(in[15:8]),
+                .count(clz_count[3:0])
+            );
     // ALU logic implementation here
     always_comb begin : ALU_ops
-
+    
     carry = 0;
     i = 0;
         case(op)
@@ -57,27 +60,10 @@ module ALU #(
             result = ~(in[16-1:0] ^ in[(16*2)-1:16]);
 
         //CLZ
-        4'b1000: begin
-            integer i;
-            result = 0;
-            for (i = 0; i < 16/2; i = i + 1) begin
-                if (in[(16/2)-1-i] == 1'b0) begin
-                    result = result + 1;
-                end else begin
-                    break;
-                end
-            end
-        end
-<<<<<<< HEAD
-        
-=======
+        4'b1000: 
+            result = { 12'b0, clz_count};
 
 
-<<<<<<< HEAD
-=======
->>>>>>> 4f5e496cf89e4f567fe7179c77bd63a585a7171c
-        
->>>>>>> refs/remotes/origin/main
         default:
         result = 0;
     
@@ -85,4 +71,23 @@ module ALU #(
     end
 
 
+endmodule
+module clz8(
+    input  wire [7:0] in,
+    output reg  [3:0] count
+);
+    always_comb begin
+        casez (in)
+            8'b1???????: count = 0;
+            8'b01??????: count = 1;
+            8'b001?????: count = 2;
+            8'b0001????: count = 3;
+            8'b00001???: count = 4;
+            8'b000001??: count = 5;
+            8'b0000001?: count = 6;
+            8'b00000001: count = 7;
+            8'b00000000: count = 8;
+            default:     count = 0;
+        endcase
+    end
 endmodule
