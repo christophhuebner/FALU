@@ -17,6 +17,10 @@ module divu_int # ( // 8 of numbers in bits
     logic [8:0] acc, acc_next;    // accumulator (1 bit wider)
     logic [$clog2(8)-1:0] i;      // iteration counter
 
+    reg divisor_sign; 
+    reg dividend_sign;
+    reg [8-1:0] dividend_abs;
+    reg [8-1:0] divisor_abs;
     // division algorithm iteration
     always_comb begin
         if (acc >= {1'b0, b1}) begin
@@ -31,6 +35,10 @@ module divu_int # ( // 8 of numbers in bits
     always_ff @(posedge clk) begin
         done <= 0;
         if (start) begin
+            divisor_sign <= b[7];
+            dividend_sign <= a[7];
+            divisor_abs = divisor_sign ? -b : b;
+            dividend_abs = dividend_sign ? -a : a;
             valid <= 0;
             i <= 0;
             if (b == 0) begin  // catch divide by zero
@@ -40,8 +48,8 @@ module divu_int # ( // 8 of numbers in bits
             end else begin
                 busy <= 1;
                 dbz <= 0;
-                b1 <= b;
-                {acc, quo} <= {{8{1'b0}}, a, 1'b0};  // initialize calculation
+                b1 <= divisor_abs; // use absolute value of divisor for copy
+                {acc, quo} <= {{8{1'b0}}, dividend_abs, 1'b0};  // initialize calculation
             end
         end else if (busy) begin
             if (i == 8-1) begin  // we're done
@@ -50,6 +58,8 @@ module divu_int # ( // 8 of numbers in bits
                 valid <= 1;
                 val <= quo_next;
                 rem <= acc_next[8:1];  // undo final shift
+                val <= (reg_divisor_sign ^ reg_dividend_sign) ? -quo_next : quo_next;
+                rem <= reg_divisor_sign ? -acc_next[8:1] : acc_next[8:1];
             end else begin  // next iteration
                 i <= i + 1;
                 acc <= acc_next;

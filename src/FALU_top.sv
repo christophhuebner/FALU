@@ -18,6 +18,8 @@ module FALU_top # (
     wire signed [7:0] divisor;
     wire signed [7:0] quotient;
     wire signed [7:0] remainder;
+    wire division_done;
+    wire division_busy;
     ALU alu_inst (
         .data_IN(data_in),
         .op(op),
@@ -37,14 +39,14 @@ module FALU_top # (
         .clk(clk),
         .rst(reset),
         .start(divide), // Start division if operation is 'Div'
-        .busy(),
-        .done(),
+        .busy(division_busy),
+        .done(division_done),
         .valid(),
         .dbz(),
         .a(dividend), // Dividend
         .b(divisor),  // Divisor
-        .val(result),      // Quotient
-        .rem()             // Remainder (not used here)
+        .val(quotient),      // Quotient
+        .rem(remainder)             // Remainder (not used here)
     );
     always @(posedge clk) begin
         if (!reset) begin
@@ -55,11 +57,15 @@ module FALU_top # (
                // Perform ALU operations
                alu_inst.data_in <= data_in;
                alu_inst.op <= op;
-            if(op==4'b1101)begin
+            if(op==4'b1101 | division_busy)begin
                 divide <= 1; // Set divide flag for division operation
                 dividend <= data_in[15:8];
                 divisor <= data_in[7:0];
-
+                if (division_done) begin
+                    divide <= 0; 
+                    result[7:0] <= quotient;
+                    result[15:8] <= remainder;
+                end
         end
     end
     end
