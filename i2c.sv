@@ -31,7 +31,7 @@ module I2C_Controller (
 				end
 				
 				1: begin
-					data_in[counter] <= sda;
+					data_in[counter] <= sda_i;
 					if(counter == 0) begin
 						state <= 4;
 					end else counter <= counter - 1;
@@ -47,7 +47,7 @@ module I2C_Controller (
 				2: begin
 					if(counter == 0) state <= 0;
 					else begin counter <= counter - 1;
-                    sda_out <= result[counter];
+                    sda_o <= result[counter];
                 end		
 				end
 				
