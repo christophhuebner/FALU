@@ -9,8 +9,8 @@ TOPLEVEL_LANG ?= verilog
 # Add verilog sources
 # Add more sources by replicating the following lines.
 #VERILOG_SOURCES += $(PWD)/FALU_top.sv
-VERILOG_SOURCES += $(PWD)/ALU.sv
-VERILOG_SOURCES += $(PWD)/i2c.sv
+VERILOG_SOURCES += $(PWD)/src/ALU.sv
+VERILOG_SOURCES += $(PWD)/src/i2c.sv
 
 # TOPLEVEL is the name of the toplevel module in your Verilog or VHDL file
 TOPLEVEL = ALU

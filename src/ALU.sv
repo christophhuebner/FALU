@@ -134,8 +134,8 @@ endmodule
 
 
 module ctz8(
-    input wire signed [7:0] data_in,
-    output reg signed [3:0] count
+    input wire  [7:0] data_in,
+    output reg  [3:0] count
 );
     always_comb begin
         casez (data_in)
