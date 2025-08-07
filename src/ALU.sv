@@ -100,14 +100,7 @@ module ALU (
       //Multiplication
       OP_MUL: result = $signed(data_in[15:8]) * $signed(data_in[7:0]);
 
-      //Division
-      OP_DIV: begin
-        if (data_in[7:0] != 0) begin
-          result = $signed(data_in[15:8]) / $signed(data_in[7:0]);
-        end else begin
-          result = 16'hFFFF;  // Division by zero, return max value
-        end
-      end
+    
 
       //Default
       default: result = 0;
