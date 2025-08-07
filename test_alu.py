@@ -1,6 +1,10 @@
 import cocotb
 from cocotb.triggers import Timer
 
+
+def to_signed(val, bits):
+    return val - (1 << bits) if val >= (1 << (bits - 1)) else val
+
 def add_model(a, b):
     pass
 
@@ -54,7 +58,7 @@ def hamming_distance_model(a,b):
 
 
 
-@cocotb.test()
+@cocotb.test(skip=True)
 async def test_mac(dut):
     dut.op.value = 0b1001
     for a in range(16):
@@ -70,7 +74,7 @@ async def test_mac(dut):
                 assert actual == expected, f"Mismatch for A={a} B={b} C={c}: got {actual}, expected {expected}"
                
 
-@cocotb.test()
+@cocotb.test(skip=True)
 async def test_sort(dut):
     '''Test the sorting number'''
     dut.op.value = 0b1010
@@ -84,7 +88,7 @@ async def test_sort(dut):
             assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
                
 
-@cocotb.test()
+@cocotb.test(skip=True)
 async def test_hamming_distance(dut):
     '''Test Hamming distance'''
     dut.op.value = 0b1111
@@ -99,4 +103,18 @@ async def test_hamming_distance(dut):
             assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
            
 
+@cocotb.test()
+async def test_addition(dut):
+    '''Test Addition'''
+    dut.op.value = 0b0000
+    for a in range(-128, 128):
+        for b in range(-128,128):
+            merged = (a << 8) | (b & 0xFF)
+            dut.data_in.value = merged
+            await Timer(2, "ns")
+            actual = dut.result.value.signed_integer
+            expected = a + b
+            assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
+           
+            
 

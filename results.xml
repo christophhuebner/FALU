@@ -1,8 +1,15 @@
 <testsuites name="results">
   <testsuite name="all" package="all">
-    <property name="random_seed" value="1754568426" />
-    <testcase name="test_mac" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="57" time="0.9705240726470947" sim_time_ns="131072.001" ratio_time="135052.80775004622" />
-    <testcase name="test_sort" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="73" time="0.9757790565490723" sim_time_ns="131072.001" ratio_time="134325.49112454572" />
-    <testcase name="test_hamming_distance" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="87" time="0.9879727363586426" sim_time_ns="131072.00100000005" ratio_time="132667.62955736037" />
+    <property name="random_seed" value="1754570686" />
+    <testcase name="test_mac" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="61" time="0" sim_time_ns="0" ratio_time="nan">
+      <skipped />
+    </testcase>
+    <testcase name="test_sort" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="77" time="0" sim_time_ns="0" ratio_time="nan">
+      <skipped />
+    </testcase>
+    <testcase name="test_hamming_distance" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="91" time="0" sim_time_ns="0" ratio_time="nan">
+      <skipped />
+    </testcase>
+    <testcase name="test_addition" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="106" time="0.9474978446960449" sim_time_ns="131072.001" ratio_time="138334.88037331376" />
   </testsuite>
 </testsuites>
