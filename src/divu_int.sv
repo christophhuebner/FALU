@@ -56,10 +56,8 @@ module divu_int ( // 8 of numbers in bits
                 busy <= 0;
                 done <= 1;
                 valid <= 1;
-                val <= quo_next;
-                rem <= acc_next[8:1];  // undo final shift
-                val <= (reg_divisor_sign ^ reg_dividend_sign) ? -quo_next : quo_next;
-                rem <= reg_divisor_sign ? -acc_next[8:1] : acc_next[8:1];
+                val <= (divisor_sign ^ dividend_sign) ? -quo_next : quo_next;
+                rem <= divisor_sign ? -acc_next[8:1] : acc_next[8:1];
             end else begin  // next iteration
                 i <= i + 1;
                 acc <= acc_next;
