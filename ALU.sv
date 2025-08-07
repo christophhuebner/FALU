@@ -11,11 +11,15 @@ module ALU #(
 
     // ALU logic implementation here
     always_comb begin : ALU_ops
+        
         case(op)
         4'b0000:
         // Add more operations as needed
-        default: result = 0;
-    endcase
+        
+        default:
+        result = 0;
+    
+        endcase
     end
 endmodule
 
