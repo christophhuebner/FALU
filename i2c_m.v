@@ -2,11 +2,12 @@ module i2c_m_controller(
 	input wire clk,
 	input wire rst,
 	input op,
-	input wire [7:0] data_in,
+	input wire [15:0] data_in,
+    input wire [3:0] op_code,
 	input wire enable,
 	output wire rw,
 
-	output reg [7:0] data_out,
+	output reg [19:0] data_out,
 	output wire ready,
     output wire start,
 
@@ -15,26 +16,16 @@ module i2c_m_controller(
 	output wire i2c_scl
 	);
 
-	localparam IDLE = 0;
-	localparam START = 1;
-	localparam ADDRESS = 2;
-	localparam READ_ACK = 3;
-	localparam WRITE_DATA = 4;
-	localparam WRITE_ACK = 5;
-	localparam READ_DATA = 6;
-	localparam READ_ACK2 = 7;
-	localparam STOP = 8;
-	
+
 	localparam DIVIDE_BY = 4;
 
-	reg [7:0] state;
-	reg [7:0] saved_data;
-	reg [7:0] counter;
+  reg [3:0] state = 0;
+	reg [19:0] saved_data;
+	reg [4:0] counter;
 	reg [7:0] counter2 = 0;
-	reg write_enable;
 	reg i2c_clk = 1;
 
-	assign ready = ((rst == 0) && (state == IDLE)) ? 1 : 0;
+	assign ready = ((rst == 0) && (state == 0)) ? 1 : 0;
     assign i2c_scl = i2c_clk;
 	
 	always @(posedge clk) begin
@@ -47,63 +38,59 @@ module i2c_m_controller(
 	
 	always @(posedge i2c_clk, posedge rst) begin
 		if(rst == 1) begin
-			state <= IDLE;
+			state <= 0;
             counter <= 0;
+            start <= 0;
 		end		
 		else begin
 			case(state)
-			
-				IDLE: begin
+				0: begin
 					if (enable) begin
-						state <= START;
-						saved_data <= data_in;
+						state <= 1;
+						saved_data <= {op_code,data_in};
+                        rw <= op;
 					end
-					else state <= IDLE;
+					else state <= 0;
 				end
 
-				START: begin
-					state <= 3;
+				1: begin
+					state <= 2;
                     start <= 1;
 				end
 
-				3: begin
-					if (i2c_sda == 0) begin
+				2: begin
 						if(op == 0) begin 
                             counter <= 19;
-                            state <= WRITE_DATA; 
-                            rw <= 0;
+                            state <= 3; 
                             end
 						else begin 
                             counter <= 15;
-                            state <= READ_DATA; 
-                            rw <= 1;
+                            state <= 4; 
                             end
-					end else state <= STOP;
 				end
 
-				WRITE_DATA: begin
+				3: begin
 					if(counter == 0) begin
-						state <= STOP;
+						state <= 5;
                     end else begin 
-                        counter <= counter - 1;
                         i2c_sda_o <= saved_data[counter];
+                        counter <= counter - 1;
                     end
 				end
 				
-
-
-				READ_DATA: begin
+				4: begin
 					data_out[counter] <= i2c_sda_i;
-					if (counter == 0) state <= STOP;
+					if (counter == 0) state <= 5;
 					else counter <= counter - 1;
 				end
 				
 
-				STOP: begin
-					state <= IDLE;
+				5: begin
+					state <= 0;
                     start <= 0;
 
 				end
+                default: state <= 0;
 			endcase
 		end
 	end

@@ -16,7 +16,7 @@ module divu_int ( // 8 of numbers in bits
     logic [7:0] quo, quo_next;  // intermediate quotient
     logic [8:0] acc, acc_next;    // accumulator (1 bit wider)
     logic [$clog2(8)-1:0] i;      // iteration counter
-
+    logic inv;                   // inversion flag for signed division
     reg divisor_sign; 
     reg dividend_sign;
     reg [7:0] dividend_abs;
@@ -35,7 +35,9 @@ module divu_int ( // 8 of numbers in bits
     // calculation control
     always_ff @(posedge clk) begin
         done <= 0;
+
         if (start) begin
+            if(!inv)begin
             divisor_sign <= b[7];
             dividend_sign <= a[7];
             divisor_abs <= divisor_sign ? -b : b;
@@ -51,6 +53,7 @@ module divu_int ( // 8 of numbers in bits
                 dbz <= 0;
                 b1 <= divisor_abs; // use absolute value of divisor for copy
                 {acc, quo} <= {{8{1'b0}}, dividend_abs, 1'b0};  // initialize calculation
+            end
             end
         end else if (busy & !start) begin
             if (i == 7) begin  // we're done
@@ -72,6 +75,7 @@ module divu_int ( // 8 of numbers in bits
             dbz <= 0;
             val <= 0;
             rem <= 0;
+            inv <= 0;
         end
     end
 endmodule
