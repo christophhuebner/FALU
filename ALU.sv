@@ -1,17 +1,17 @@
 module ALU (
-    signed input wire [15:0] data_in, // First operand
-    signed input  wire [3:0]       op,   // Operation selector
-    signed output reg  [15:0] result,
-    signed output reg              zero, // Zero flag
-    signed output reg              busy
+    input wire signed [15:0] data_in, // First operand
+    input wire signed [3:0] op,   // Operation selector
+    output wire signed [15:0] result,
+    output wire              zero, // Zero flag
+    output wire              busy
 );
     
-    signed wire [3:0] clz_count;
+    wire signed [3:0] clz_count;
     clz8 clz_inst (
                 .data_in(data_in[15:8]),
                 .count(clz_count[3:0])
             );
-    signed wire [3:0] ctz_count;
+    wire signed [3:0] ctz_count;
     ctz8 ctz_inst (
                 .data_in(data_in[15:8]),
                 .count(ctz_count[3:0])
@@ -96,8 +96,8 @@ module ALU (
 
 endmodule
 module clz8(
-    signed input  wire [7:0] data_in,
-    signed output reg  [3:0] count
+    input wire signed [7:0] data_in,
+    output reg signed [3:0] count
 );
     always_comb begin
         casez (data_in)
@@ -115,8 +115,8 @@ module clz8(
     end
 endmodule
 module ctz8(
-    signed input  wire [7:0] data_in,
-    signed output reg  [3:0] count
+    input wire signed [7:0] data_in,
+    output reg signed [3:0] count
 );
     always_comb begin
         casez (data_in)
