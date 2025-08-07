@@ -1,4 +1,4 @@
-module divu_int ( // width of numbers in bits
+module divu_int ( 
     input wire logic clk,              // clock
     input wire logic rst,              // reset
     input wire logic start,            // start calculation
@@ -41,7 +41,7 @@ module divu_int ( // width of numbers in bits
                 busy <= 1;
                 dbz <= 0;
                 b1 <= b;
-                {acc, quo} <= {{WIDTH{1'b0}}, a, 1'b0};  // initialize calculation
+                {acc, quo} <= {{8{1'b0}}, a, 1'b0};  // initialize calculation
             end
         end else if (busy) begin
             if (i == 7) begin  // we're done
@@ -49,7 +49,7 @@ module divu_int ( // width of numbers in bits
                 done <= 1;
                 valid <= 1;
                 val <= quo_next;
-                rem <= acc_next[WIDTH:1];  // undo final shift
+                rem <= acc_next[8:1];  // undo final shift
             end else begin  // next iteration
                 i <= i + 1;
                 acc <= acc_next;
