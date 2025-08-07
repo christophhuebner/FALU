@@ -2,22 +2,17 @@
 
 Fancy ALU
 
-# ALU operations table
-0000: ADD
-0001: SUB
-0010: AND
-0011: OR
-0100: XOR
-0101: NAND
-0110: NOR
-0111: XNO
-1000: 
-1001: 
-1010: 
-1011:
-1100: 
-1101: 
-1110: 
-1111: 
-1000:
+## ALU Operations Table
 
+| ✅ Done? | Opcode | Operation |
+|:--------:|:------:|:---------:|
+| [ ]      | 0000   | ADD       |
+| [ ]      | 0001   | SUB       |
+| [ ]      | 0010   | AND       |
+| [ ]      | 0011   | OR        |
+| [ ]      | 0100   | XOR       |
+| [ ]      | 0101   | NAND      |
+| [ ]      | 0110   | NOR       |
+| [ ]      | 0111   | XNOR      |
+| [ ]      | 1000   | Hamming Distance |
+| [ ]      | 1001   | Hamming Weight |
