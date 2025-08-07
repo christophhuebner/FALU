@@ -55,6 +55,10 @@ module ALU #(
         end
 
 
+<<<<<<< HEAD
+=======
+        
+>>>>>>> refs/remotes/origin/main
         default:
         result = 0;
     
