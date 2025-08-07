@@ -11,6 +11,7 @@ module ALU #(
 
     // ALU logic implementation here
     always_comb begin : ALU_ops
+        
         case(op)
         //ADD 
         4'b0000: result = in[WIDTH-1:0] + in[(WIDTH*2)-1:WIDTH];

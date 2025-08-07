@@ -1,8 +1,14 @@
-module FALU(
+module FALU_top # (
+    parameter WIDTH = 8;
+)(
+
 );
 
+
     ALU #(
-        .WIDTH(8)
+
+        .WIDTH(WIDTH)
+
     ) alu_inst (
         .a(a),
         .b(b),
@@ -11,14 +17,22 @@ module FALU(
         .zero(zero),
         .carry(carry)
     );
+
+
+    /*
     I2C_Controller i2c_input (
         .clk(clk),
         .data_in(),
         .data_out()
     );
+
     I2C_Controller i2c_output (
         .clk(clk),
         .data_in(),
         .data_out()
     );
+
+    */
+
+
 endmodule
