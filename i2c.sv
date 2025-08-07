@@ -1,115 +1,59 @@
 module I2C_Controller (
     input  wire scl,
-    inout  wire sda,
+    input  wire sda_i,
+    output  wire sda_o,
     input reset,
     input[15:0] result,
+    input start,
+    input w_r,
     output wire [15:0] data_out, 
     output  wire [3:0]  op
 );
-
-	localparam READ_ADDR = 0;
-	localparam SEND_ACK = 1;
-	localparam READ_DATA = 2;
-	localparam WRITE_DATA = 3;
-	localparam SEND_ACK2 = 4;
-	
 	
 	reg [4:0] counter;
 	reg [3:0] state = 0;
 	reg [19:0] data_in = 0;
-	reg sda_out = 0;
-	reg sda_in = 0;
-	reg start = 0;
-	reg write_enable = 0;
    
-
-   assign sda = (write_enable == 1) ? sda_out : 'bz;
-	
-	always @(negedge sda) begin
-		if ((start == 0) && (scl == 1)) begin
-			start <= 1;	
-			counter <= 7;
-		end
-	end
-	
-	always @(posedge sda) begin
-		if ((start == 1) && (scl == 1)) begin
-			state <= READ_ADDR;
-			start <= 0;
-			write_enable <= 0;
-		end
-	end
 	
 	always @(posedge scl) begin
 		if (start == 1) begin
-			case(state)
-				READ_ADDR: begin
-					op <= sda;
-					state <= SEND_ACK;					
-				end
-				
-				SEND_ACK: begin
-						
-						if(op == 0) begin
-                            counter <= 19; 
-							state <= READ_DATA;
-						end
-						else begin
-                            counter <= 15;
-                        state <= WRITE_DATA;
-                        end
+			case(state)			
+				0: begin
+                    if(w_r == 0) begin
+                        counter <= 19; 
+                        state <= 1;
+                    end
+                    else begin
+                        counter <= 15;
+                    state <= 2;
+                    end
 					
 				end
 				
-				READ_DATA: begin
+				1: begin
 					data_in[counter] <= sda;
 					if(counter == 0) begin
-						state <= SEND_ACK2;
+						state <= 4;
 					end else counter <= counter - 1;
 				end
 				
-				SEND_ACK2: begin
-					state <= READ_ADDR;		
+				4: begin
+					state <= 0;		
                     op <= data_in[19:16];
                     data_out <= data_in[15:0];
 
 				end
 				
-				WRITE_DATA: begin
-					if(counter == 0) state <= READ_ADDR;
-					else counter <= counter - 1;		
+				2: begin
+					if(counter == 0) state <= 0;
+					else begin counter <= counter - 1;
+                    sda_out <= result[counter];
+                end		
 				end
 				
 			endcase
 		end
 	end
 	
-	always @(negedge scl) begin
-		case(state)
-			
-			READ_ADDR: begin
-				write_enable <= 0;			
-			end
-			
-			SEND_ACK: begin
-				sda_out <= 0;
-				write_enable <= 1;	
-			end
-			
-			READ_DATA: begin
-				write_enable <= 0;
-			end
-			
-			WRITE_DATA: begin
-				sda_out <= result[counter];
-				write_enable <= 1;
-			end
-			
-			SEND_ACK2: begin
-				sda_out <= 0;
-				write_enable <= 1;
-			end
-		endcase
-	end
 
 endmodule
