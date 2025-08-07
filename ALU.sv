@@ -10,27 +10,36 @@ module ALU #(
 );
 
     // ALU logic implementation here
-    always_combs begin : ALU_ops
+    always_comb begin : ALU_ops
         
         case(op)
+
         //ADD 
-        4'b0000: result = in[WIDTH-1:0] + in[(WIDTH*2)-1:WIDTH];
+        4'b0000:
+            result = in[WIDTH-1:0] + in[(WIDTH*2)-1:WIDTH];
         //SUB
-        4'b0001: result = in[WIDTH-1:0] - in[(WIDTH*2)-1:WIDTH];
+        4'b0001:
+            result = in[WIDTH-1:0] - in[(WIDTH*2)-1:WIDTH];
         //AND
-        4'b0010: result = in[WIDTH-1:0] & in[(WIDTH*2)-1:WIDTH];
+        4'b0010:
+            result = in[WIDTH-1:0] & in[(WIDTH*2)-1:WIDTH];
         //OR
-        4'b0011: result = in[WIDTH-1:0] | in[(WIDTH*2)-1:WIDTH];
+        4'b0011:
+            result = in[WIDTH-1:0] | in[(WIDTH*2)-1:WIDTH];
 
         //XOR
-        4'b0100: result = in[WIDTH-1:0] ^ in[(WIDTH*2)-1:WIDTH];
+        4'b0100:
+            result = in[WIDTH-1:0] ^ in[(WIDTH*2)-1:WIDTH];
 
         //NAND
-        4'b0101: result = ~(in[WIDTH-1:0] & in[(WIDTH*2)-1:WIDTH]);
+        4'b0101:
+            result = ~(in[WIDTH-1:0] & in[(WIDTH*2)-1:WIDTH]);
         //NOR
-        4'b0110: result = ~(in[WIDTH-1:0] | in[(WIDTH*2)-1:WIDTH]);
+        4'b0110:
+            result = ~(in[WIDTH-1:0] | in[(WIDTH*2)-1:WIDTH]);
         //XNOR
-        4'b0111: result = ~(in[WIDTH-1:0] ^ in[(WIDTH*2)-1:WIDTH]);
+        4'b0111:
+            result = ~(in[WIDTH-1:0] ^ in[(WIDTH*2)-1:WIDTH]);
 
         //CLZ
         4'b1000: begin
@@ -46,20 +55,12 @@ module ALU #(
         end
 
 
-        
-<<<<<<< HEAD
         default:
-        result = 0
+        result = 0;
     
         endcase
     end
 
 
-=======
-        default: result = 0;
-    endcase
-    end
-    if
->>>>>>> refs/remotes/origin/main
 endmodule
 

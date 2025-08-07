@@ -1,6 +1,9 @@
 module FALU_top # (
     parameter WIDTH = 8
-)();
+)(
+    
+
+);
 
 
     ALU #(
