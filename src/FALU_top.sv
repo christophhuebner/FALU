@@ -29,6 +29,7 @@ module FALU_top # (
         .data_in(data_in),
         .op(op)
     );
+    
     always @(posedge clk) begin
         if (!reset) begin
             result <= 0;

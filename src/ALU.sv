@@ -5,6 +5,9 @@ module ALU (
     output wire              zero, // Zero flag
     output wire              busy
 );
+    
+
+
 
     wire [3:0] clz_count;
 
