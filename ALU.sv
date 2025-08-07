@@ -18,7 +18,7 @@ module ALU #(
 
         //mac
         4'b1001:
-        carry,result = in[15:12] * in[11:8] + in[7:0];
+        {carry,result} = in[15:12] * in[11:8] + in[7:0];
         //sort
         4'b1010:
         //hd/hw
