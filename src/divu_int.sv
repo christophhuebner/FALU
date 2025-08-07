@@ -1,4 +1,4 @@
-module divu_int ( // 8 of numbers in bits
+module divu_int ( // width of numbers in bits
     input wire logic clk,              // clock
     input wire logic rst,              // reset
     input wire logic start,            // start calculation
@@ -16,12 +16,7 @@ module divu_int ( // 8 of numbers in bits
     logic [7:0] quo, quo_next;  // intermediate quotient
     logic [8:0] acc, acc_next;    // accumulator (1 bit wider)
     logic [$clog2(8)-1:0] i;      // iteration counter
-    logic inv = 0;                   // inversion flag for signed division
-    reg divisor_sign; 
-    reg dividend_sign;
-    reg [7:0] dividend_abs;
-    reg [7:0] divisor_abs;
-    
+
     // division algorithm iteration
     always_comb begin
         if (acc >= {1'b0, b1}) begin
@@ -35,17 +30,7 @@ module divu_int ( // 8 of numbers in bits
     // calculation control
     always_ff @(posedge clk) begin
         done <= 0;
-
         if (start) begin
-            if(!inv)begin
-            divisor_sign = b[7];
-            dividend_sign = a[7];
-            divisor_abs = divisor_sign ? -b : b;
-            dividend_abs = dividend_sign ? -a : a;
-            inv <= 1;
-            end else
-            begin
- 
             valid <= 0;
             i <= 0;
             if (b == 0) begin  // catch divide by zero
@@ -55,17 +40,16 @@ module divu_int ( // 8 of numbers in bits
             end else begin
                 busy <= 1;
                 dbz <= 0;
-                b1 <= divisor_abs; // use absolute value of divisor for copy
-                {acc, quo} <= {{8{1'b0}}, dividend_abs, 1'b0};  // initialize calculation
-            end
+                b1 <= b;
+                {acc, quo} <= {{WIDTH{1'b0}}, a, 1'b0};  // initialize calculation
             end
         end else if (busy) begin
             if (i == 7) begin  // we're done
                 busy <= 0;
                 done <= 1;
                 valid <= 1;
-                val <= (divisor_sign ^ dividend_sign) ? -quo_next : quo_next;
-                rem <= divisor_sign ? -acc_next[8:1] : acc_next[8:1];
+                val <= quo_next;
+                rem <= acc_next[WIDTH:1];  // undo final shift
             end else begin  // next iteration
                 i <= i + 1;
                 acc <= acc_next;
@@ -79,7 +63,6 @@ module divu_int ( // 8 of numbers in bits
             dbz <= 0;
             val <= 0;
             rem <= 0;
-            inv <= 0;
         end
     end
 endmodule

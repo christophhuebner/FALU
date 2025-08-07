@@ -59,12 +59,14 @@ module FALU_top # (
                alu_inst.op <= op;
             if(op==4'b1101 | division_busy)begin
                 divide <= 1; // Set divide flag for division operation
-                dividend <= data_in[15:8];
-                divisor <= data_in[7:0];
+                divisor_abs = data_in[7] ? -data_in[7:0] : data_in[7:0];
+                dividend_abs = data_in[15] ? -data_in[15:8] : data_in[15:8];
                 if (division_done) begin
                     divide <= 0; 
                     result[7:0] <= quotient;
                     result[15:8] <= remainder;
+                    result[7:0] <= (data_in[7] ^ data_in[15]) ? -quotient : quotient;
+                    result[15:8] <= data_in[7] ? -remainder : remainder;
                 end
         end
     end
