@@ -2,7 +2,7 @@
 
 # Simulator to be used.
 SIM ?= verilator
-#EXTRA_ARGS += 
+EXTRA_ARGS += --trace --trace-structs
 
 TOPLEVEL_LANG ?= verilog
 

@@ -60,7 +60,7 @@ module divu_int ( // 8 of numbers in bits
             end
             end
         end else if (busy & !start) begin
-            if (i == 8-1) begin  // we're done
+            if (i == 7) begin  // we're done
                 busy <= 0;
                 done <= 1;
                 valid <= 1;
