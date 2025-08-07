@@ -1,48 +1,6 @@
 <testsuites name="results">
   <testsuite name="all" package="all">
-    <property name="random_seed" value="1754587181" />
-    <testcase name="test_mac" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="84" time="0" sim_time_ns="0" ratio_time="nan">
-      <skipped />
-    </testcase>
-    <testcase name="test_sort" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="100" time="0" sim_time_ns="0" ratio_time="nan">
-      <skipped />
-    </testcase>
-    <testcase name="test_hamming_distance" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="114" time="0" sim_time_ns="0" ratio_time="nan">
-      <skipped />
-    </testcase>
-    <testcase name="test_addition" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="129" time="0" sim_time_ns="0" ratio_time="nan">
-      <skipped />
-    </testcase>
-    <testcase name="test_subtraction" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="142" time="0" sim_time_ns="0" ratio_time="nan">
-      <skipped />
-    </testcase>
-    <testcase name="test_and" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="155" time="0" sim_time_ns="0" ratio_time="nan">
-      <skipped />
-    </testcase>
-    <testcase name="test_or" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="168" time="0" sim_time_ns="0" ratio_time="nan">
-      <skipped />
-    </testcase>
-    <testcase name="test_xor" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="181" time="0" sim_time_ns="0" ratio_time="nan">
-      <skipped />
-    </testcase>
-    <testcase name="test_nand" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="194" time="0" sim_time_ns="0" ratio_time="nan">
-      <skipped />
-    </testcase>
-    <testcase name="test_nor" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="208" time="0" sim_time_ns="0" ratio_time="nan">
-      <skipped />
-    </testcase>
-    <testcase name="test_xnor" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="222" time="0" sim_time_ns="0" ratio_time="nan">
-      <skipped />
-    </testcase>
-    <testcase name="test_clz" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="236" time="0" sim_time_ns="0" ratio_time="nan">
-      <skipped />
-    </testcase>
-    <testcase name="test_ctz" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="250" time="0" sim_time_ns="0" ratio_time="nan">
-      <skipped />
-    </testcase>
-    <testcase name="test_multiplication" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="265" time="0" sim_time_ns="0" ratio_time="nan">
-      <skipped />
-    </testcase>
-    <testcase name="test_logarithm" classname="test_alu" file="/Users/amritsharmapoudel/Desktop/FALU/test_alu.py" lineno="279" time="0.004153013229370117" sim_time_ns="512.001" ratio_time="123284.22081083873" />
+    <property name="random_seed" value="1754588335" />
+    <testcase name="test_division" classname="div_test" file="/Users/amritsharmapoudel/Desktop/FALU/div_test.py" lineno="7" time="14.974500894546509" sim_time_ns="358404.001" ratio_time="23934.286927087192" />
   </testsuite>
 </testsuites>
