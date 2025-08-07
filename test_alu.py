@@ -59,4 +59,4 @@ async def test_mac(dut):
     for a in range(4):
         for b in range (4):
             for c in range(8):
-                dut.op.value = 44444
+                dut.data_in.value = 4444
