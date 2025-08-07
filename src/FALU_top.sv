@@ -54,9 +54,6 @@ module FALU_top # (
             zero <= 0;
         end else begin
            //does FALU need to do something here?
-               // Perform ALU operations
-               alu_inst.data_in <= data_in;
-               alu_inst.op <= op;
             if(op==4'b1101 | division_busy)begin
                 divide <= 1; // Set divide flag for division operation
                 divisor_abs = data_in[7] ? -data_in[7:0] : data_in[7:0];
@@ -66,7 +63,7 @@ module FALU_top # (
                     result[7:0] <= quotient;
                     result[15:8] <= remainder;
                     result[7:0] <= (data_in[7] ^ data_in[15]) ? -quotient : quotient;
-                    result[15:8] <= data_in[7] ? -remainder : remainder;
+                    result[15:8] <= data_in[15] ? -remainder : remainder;
                 end
         end
     end
