@@ -52,8 +52,8 @@ module divu_int ( // 8 of numbers in bits
                 b1 <= divisor_abs; // use absolute value of divisor for copy
                 {acc, quo} <= {{8{1'b0}}, dividend_abs, 1'b0};  // initialize calculation
             end
-        end else if (busy) begin
-            if (i == 7) begin  // we're done
+        end else if (busy & !start) begin
+            if (i == 8-1) begin  // we're done
                 busy <= 0;
                 done <= 1;
                 valid <= 1;
