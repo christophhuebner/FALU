@@ -1,7 +1,5 @@
 import cocotb
-from cocotb.triggers import RisingEdge, ClockCycles
-from cocotb.clock import Clock
-
+from cocotb.triggers import Timer
 
 def add_model(a, b):
     pass
@@ -55,8 +53,16 @@ def hamming_distance_model(a,b):
 
 @cocotb.test()
 async def test_mac(dut):
-    '''Tests the mac operation'''
-    for a in range(4):
-        for b in range (4):
-            for c in range(8):
-                dut.data_in.value = 4444
+    dut.op.value = 0b1001
+    for a in range(16):
+        for b in range(16):
+            for c in range(256):
+                merged = (a << 12) | (b << 8) | c
+                dut.data_in.value = merged
+                await Timer(2, "ns")
+                
+                expected = a * b + c
+                actual = dut.result.value.integer
+                
+                assert actual == expected, f"Mismatch for A={a} B={b} C={c}: got {actual}, expected {expected}"
+               
