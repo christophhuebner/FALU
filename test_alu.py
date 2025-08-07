@@ -276,7 +276,6 @@ async def test_multiplication(dut):
             assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
 
 
-
 @cocotb.test()
 async def test_logarithm(dut):
     '''Test Logarithm'''
