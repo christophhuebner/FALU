@@ -26,5 +26,5 @@ Create a virtual environment.\\
 
 
 ## Building for yosys
-morty FALU_top.sv > FALU_top_pickled.sv
+morty sr/FALU_top.sv > src/FALU_top_pickled.sv
 sv2v 
