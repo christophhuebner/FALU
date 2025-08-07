@@ -1,28 +1,25 @@
 module ALU (
-    input wire [15:0] data_in, // First operand
-    input  wire [3:0]       op,   // Operation selector
-    output reg  [15:0] result,
-    output reg              zero, // Zero flag
-    output reg              carry, // Carry flag
-    output reg              busy
+    signed input wire [15:0] data_in, // First operand
+    signed input  wire [3:0]       op,   // Operation selector
+    signed output reg  [15:0] result,
+    signed output reg              zero, // Zero flag
+    signed output reg              busy
 );
-    integer i;
-    wire [3:0] clz_count;
+    
+    signed wire [3:0] clz_count;
     clz8 clz_inst (
                 .data_in(data_in[15:8]),
                 .count(clz_count[3:0])
             );
-    wire [3:0] ctz_count;
+    signed wire [3:0] ctz_count;
     ctz8 ctz_inst (
                 .data_in(data_in[15:8]),
                 .count(ctz_count[3:0])
             );
     // ALU logic implementation here
-    
+
     always_comb begin : ALU_ops
     
-    carry = 0;
-    i = 0;
     zero = 0;
         case(op)
 
@@ -91,7 +88,7 @@ module ALU (
         result = 0;
     
         endcase
-        if (result == 0 & carry ==0) begin
+        if (result == 0) begin
             zero = 1;
         end
     end
@@ -99,8 +96,8 @@ module ALU (
 
 endmodule
 module clz8(
-    input  wire [7:0] data_in,
-    output reg  [3:0] count
+    signed input  wire [7:0] data_in,
+    signed output reg  [3:0] count
 );
     always_comb begin
         casez (data_in)
@@ -118,8 +115,8 @@ module clz8(
     end
 endmodule
 module ctz8(
-    input  wire [7:0] data_in,
-    output reg  [3:0] count
+    signed input  wire [7:0] data_in,
+    signed output reg  [3:0] count
 );
     always_comb begin
         casez (data_in)
