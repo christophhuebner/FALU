@@ -9,10 +9,16 @@ module ALU (
     integer i;
     wire [3:0] clz_count;
     clz8 clz_inst (
-                .in(in[15:8]),
+                .data_in(data_in[15:8]),
                 .count(clz_count[3:0])
             );
+    wire [3:0] ctz_count;
+    ctz8 ctz_inst (
+                .data_in(data_in[15:8]),
+                .count(ctz_count[3:0])
+            );
     // ALU logic implementation here
+    
     always_comb begin : ALU_ops
     
     carry = 0;
@@ -65,8 +71,22 @@ module ALU (
         //CLZ
         4'b1000: 
             result = { 12'b0, clz_count};
+        //CTZ
+        4'b1100:
+            result = { 12'b0, ctz_count};
+        //Mult
+        4'b1110:
+        result = data_in[15:8] * data_in[7:0];
 
-
+        //Div
+        4'b1101: begin
+            if (data_in[7:0] != 0) begin
+                result = data_in[15:8] / data_in[7:0];
+            end else begin
+                result = 16'hFFFF; // Division by zero, return max value
+            end
+        end
+        //
         default:
         result = 0;
     
@@ -79,11 +99,11 @@ module ALU (
 
 endmodule
 module clz8(
-    input  wire [7:0] in,
+    input  wire [7:0] data_in,
     output reg  [3:0] count
 );
     always_comb begin
-        casez (in)
+        casez (data_in)
             8'b1???????: count = 0;
             8'b01??????: count = 1;
             8'b001?????: count = 2;
@@ -92,6 +112,25 @@ module clz8(
             8'b000001??: count = 5;
             8'b0000001?: count = 6;
             8'b00000001: count = 7;
+            8'b00000000: count = 8;
+            default:     count = 0;
+        endcase
+    end
+endmodule
+module ctz8(
+    input  wire [7:0] data_in,
+    output reg  [3:0] count
+);
+    always_comb begin
+        casez (data_in)
+            8'b???????1: count = 0;
+            8'b??????10: count = 1;
+            8'b?????100: count = 2;
+            8'b????1000: count = 3;
+            8'b???10000: count = 4;
+            8'b??100000: count = 5;
+            8'b?1000000: count = 6;
+            8'b10000000: count = 7;
             8'b00000000: count = 8;
             default:     count = 0;
         endcase
