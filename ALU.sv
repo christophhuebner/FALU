@@ -53,7 +53,8 @@ module ALU (
 
         //SUB
         4'b0001:
-            result = data_in[7:0] - data_in[15:8];
+            result = $signed(data_in[7:0]) - $signed(data_in[15:8]);
+            
         //AND
         4'b0010:
             result = data_in[7:0] & data_in[15:8];
