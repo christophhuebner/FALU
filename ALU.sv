@@ -6,6 +6,9 @@ module ALU (
     output wire              busy
 );
     
+
+
+
     wire signed [3:0] clz_count;
     clz8 clz_inst (
                 .data_in(data_in[15:8]),
@@ -35,12 +38,19 @@ module ALU (
         end
         //hd/hw
         4'b1111: 
-        result = data_in[15] & data_in[7] + data_in[14] & data_in[6] + data_in[13] & data_in[5] + data_in[12] & data_in[4] + data_in[11] & data_in[3] + data_in[10] & data_in[2] + data_in[9] & data_in[1] + data_in[8] & data_in[0];
-
+        result =16'b0 | ((data_in[15] ^ data_in[7]) +
+                (data_in[14] ^ data_in[6]) +
+                (data_in[13] ^ data_in[5]) +
+                (data_in[12] ^ data_in[4]) +
+                (data_in[11] ^ data_in[3]) +
+                (data_in[10] ^ data_in[2]) +
+                (data_in[9]  ^ data_in[1]) +
+                (data_in[8]  ^ data_in[0]));
 
         //ADD 
         4'b0000:
-            result = data_in[7:0] + data_in[15:8];
+            result = $signed(data_in[7:0]) + $signed(data_in[15:8]);
+
         //SUB
         4'b0001:
             result = data_in[7:0] - data_in[15:8];
