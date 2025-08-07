@@ -10,8 +10,8 @@ module ALU #(
 );
 
     // ALU logic implementation here
-    always_combs begin : ALU_ops
-        
+    always_comb begin : ALU_ops
+
         case(op)
         //ADD 
         4'b0000: result = in[WIDTH-1:0] + in[(WIDTH*2)-1:WIDTH];
@@ -36,23 +36,21 @@ module ALU #(
         4'b1000: begin
             integer i;
             result = 0;
-            for (i = 0; i < WIDTH; i = i + 1) begin
-                if (in[WIDTH-1-i] == 1'b0) begin
+            for (i = 0; i < WIDTH/2; i = i + 1) begin
+                if (in[(WIDTH/2)-1-i] == 1'b0) begin
                     result = result + 1;
                 end else begin
                     break;
                 end
             end
         end
-
-
+        
         
         default:
-        result = 0
+        result = 0;
     
         endcase
     end
 
 
 endmodule
-
