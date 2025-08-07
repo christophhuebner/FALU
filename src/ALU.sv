@@ -6,12 +6,15 @@ module ALU (
     output wire              busy
 );
 
-    wire signed [3:0] clz_count;
+    wire [3:0] clz_count;
+
     clz8 clz_inst (
                 .data_in(data_in[15:8]),
                 .count(clz_count[3:0])
             );
-    wire signed [3:0] ctz_count;
+
+    wire [3:0] ctz_count;
+    
     ctz8 ctz_inst (
                 .data_in(data_in[15:8]),
                 .count(ctz_count[3:0])
@@ -51,27 +54,28 @@ module ALU (
         //SUB
         4'b0001:
             result = $signed(data_in[7:0]) - $signed(data_in[15:8]);
-            
+
         //AND
         4'b0010:
-            result = data_in[7:0] & data_in[15:8];
+            result = {8'b0, data_in[7:0] & data_in[15:8]};
         //OR
         4'b0011:
-            result = data_in[7:0] | data_in[15:8];
+            result = {8'b0, data_in[7:0] | data_in[15:8]};
 
         //XOR
         4'b0100:
-            result = data_in[7:0] ^ data_in[15:8];
+            result = {8'b0, data_in[7:0] ^ data_in[15:8]};
 
         //NAND
         4'b0101:
-            result = ~(data_in[7:0] & data_in[15:8]);
+           result = {8'b0, ~(data_in[7:0] & data_in[15:8])};
+
         //NOR
         4'b0110:
-            result = ~(data_in[7:0] | data_in[15:8]);
+            result = {8'b0, ~(data_in[7:0] | data_in[15:8])};
         //XNOR
         4'b0111:
-            result = ~(data_in[7:0] ^ data_in[15:8]);
+            result = {8'b0, ~(data_in[7:0] ^ data_in[15:8])};
 
         //CLZ
         4'b1000: 
@@ -103,6 +107,8 @@ module ALU (
 
 
 endmodule
+
+
 module clz8(
     input wire signed [7:0] data_in,
     output reg signed [3:0] count
@@ -122,9 +128,11 @@ module clz8(
         endcase
     end
 endmodule
+
+
 module ctz8(
-    input wire signed [7:0] data_in,
-    output reg signed [3:0] count
+    input wire  [7:0] data_in,
+    output reg  [3:0] count
 );
     always_comb begin
         casez (data_in)
