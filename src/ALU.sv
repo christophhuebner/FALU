@@ -100,6 +100,8 @@ module ALU (
       //Multiplication
       OP_MUL: result = $signed(data_in[15:8]) * $signed(data_in[7:0]);
 
+    
+
       //Default
       default: result = 0;
 
