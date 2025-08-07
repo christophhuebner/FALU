@@ -15,7 +15,7 @@ module FALU_top # (
     wire signed [3:0] op;
     
     ALU alu_inst (
-        .data_in(data_in),
+        .data_out(data_in),
         .op(op),
         .result(result),
         .zero(zero),            // Connect to appropriate output
@@ -29,6 +29,17 @@ module FALU_top # (
         .data_in(data_in),
         .op(op)
     );
+    always @(posedge clk) begin
+        if (!reset) begin
+            result <= 0;
+            zero <= 0;
+        end else begin
+           //does FALU need to do something here?
+               // Perform ALU operations
+               alu_inst.data_in <= data_in;
+               alu_inst.op <= op;
+        end
+    end
     /*
     I2C_Controller i2c_input (
         .clk(clk),
