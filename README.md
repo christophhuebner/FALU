@@ -14,3 +14,5 @@ Fancy ALU
 | [ ]      | 0101   | NAND      |
 | [ ]      | 0110   | NOR       |
 | [ ]      | 0111   | XNOR      |
+| [ ]      | 1000   | Hamming Distance |
+| [ ]      | 1001   | Hamming Weight |
