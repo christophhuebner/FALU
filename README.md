@@ -23,3 +23,8 @@
 
 ## Simulation
 Create a virtual environment.\\
+
+
+## Building for yosys
+morty FALU_top.sv
+sv2v 
