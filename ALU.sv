@@ -12,6 +12,7 @@ module ALU #(
 
     // ALU logic implementation here
     always_comb begin : ALU_ops
+
     carry = 0;
     i = 0;
     zero = 0;
@@ -83,4 +84,3 @@ module ALU #(
 
 
 endmodule
-
