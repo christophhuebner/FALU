@@ -29,39 +29,39 @@ module ALU #(
 
         //ADD 
         4'b0000:
-            result = in[WIDTH-1:0] + in[(WIDTH*2)-1:WIDTH];
+            result = in[16-1:0] + in[(16*2)-1:16];
         //SUB
         4'b0001:
-            result = in[WIDTH-1:0] - in[(WIDTH*2)-1:WIDTH];
+            result = in[16-1:0] - in[(16*2)-1:16];
         //AND
         4'b0010:
-            result = in[WIDTH-1:0] & in[(WIDTH*2)-1:WIDTH];
+            result = in[16-1:0] & in[(16*2)-1:16];
         //OR
         4'b0011:
-            result = in[WIDTH-1:0] | in[(WIDTH*2)-1:WIDTH];
+            result = in[16-1:0] | in[(16*2)-1:16];
 
         //XOR
         4'b0100:
-            result = in[WIDTH-1:0] ^ in[(WIDTH*2)-1:WIDTH];
+            result = in[16-1:0] ^ in[(16*2)-1:16];
 
         //NAND
         4'b0101:
-            result = ~(in[WIDTH-1:0] & in[(WIDTH*2)-1:WIDTH]);
+            result = ~(in[16-1:0] & in[(16*2)-1:16]);
 
         //NOR
         4'b0110:
-            result = ~(in[WIDTH-1:0] | in[(WIDTH*2)-1:WIDTH]);
+            result = ~(in[16-1:0] | in[(16*2)-1:16]);
             
         //XNOR
         4'b0111:
-            result = ~(in[WIDTH-1:0] ^ in[(WIDTH*2)-1:WIDTH]);
+            result = ~(in[16-1:0] ^ in[(16*2)-1:16]);
 
         //CLZ
         4'b1000: begin
             integer i;
             result = 0;
-            for (i = 0; i < WIDTH/2; i = i + 1) begin
-                if (in[(WIDTH/2)-1-i] == 1'b0) begin
+            for (i = 0; i < 16/2; i = i + 1) begin
+                if (in[(16/2)-1-i] == 1'b0) begin
                     result = result + 1;
                 end else begin
                     break;
