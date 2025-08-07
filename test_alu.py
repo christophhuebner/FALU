@@ -54,20 +54,9 @@ def hamming_distance_model(a,b):
 
 
 @cocotb.test()
-async def test_add(dut):
-    '''Test Docstring'''
-    pass
-
-
-@cocotb.test()
-async def test_sub(dut):
-    '''Test Docstring'''
-    pass
-
-
-@cocotb.test()
-async def test_and(dut):
-    '''Test Docstring'''
-    pass
-
-
+async def test_mac(dut):
+    '''Tests the mac operation'''
+    for a in range(4):
+        for b in range (4):
+            for c in range(8):
+                dut.op.value = 44444
