@@ -46,9 +46,11 @@ module ALU #(
         //NAND
         4'b0101:
             result = ~(in[WIDTH-1:0] & in[(WIDTH*2)-1:WIDTH]);
+
         //NOR
         4'b0110:
             result = ~(in[WIDTH-1:0] | in[(WIDTH*2)-1:WIDTH]);
+            
         //XNOR
         4'b0111:
             result = ~(in[WIDTH-1:0] ^ in[(WIDTH*2)-1:WIDTH]);
@@ -66,6 +68,11 @@ module ALU #(
             end
         end
 
+
+<<<<<<< HEAD
+=======
+        
+>>>>>>> refs/remotes/origin/main
         default:
         result = 0;
     
