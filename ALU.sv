@@ -1,7 +1,5 @@
-module ALU #(
-
-)(
-    input wire [15:0] in, // First operand
+module ALU (
+    input wire [15:0] data_in, // First operand
     input  wire [3:0]       op,   // Operation selector
     output reg  [15:0] result,
     output reg              zero, // Zero flag
@@ -20,7 +18,7 @@ module ALU #(
 
         //mac
         4'b1001:
-        {carry,result} = in[15:12] * in[11:8] + in[7:0];
+        {carry,result} = in[15:12] * in[11:8] + {8'b0, in[7:0]};
         //sort
         4'b1010:
         if (in[15:8] < in[7:0]) begin
@@ -48,17 +46,17 @@ module ALU #(
 
         //XOR
         4'b0100:
-            result = in[7:0] ^ in[15:8];
+            result = data_in[7:0] ^ data_in[15:8];
 
         //NAND
         4'b0101:
-            result = ~(in[7:0] & in[15:8]);
+            result = ~(data_in[7:0] & data_in[15:8]);
         //NOR
         4'b0110:
-            result = ~(in[7:0] | in[15:8]);
+            result = ~(data_in[7:0] | data_in[15:8]);
         //XNOR
         4'b0111:
-            result = ~(in[7:0] ^ in[15:8]);
+            result = ~(data_in[7:0] ^ data_in[15:8]);
 
         //CLZ
         4'b1000: begin
