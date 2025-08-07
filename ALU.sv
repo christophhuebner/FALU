@@ -22,31 +22,31 @@ module ALU (
 
         //mac
         4'b1001:
-        {carry,result} = in[15:12] * in[11:8] + {8'b0, in[7:0]};
+        {carry,result} = data_in[15:12] * data_in[11:8] + {8'b0, data_in[7:0]};
         //sort
         4'b1010:
-        if (in[15:8] < in[7:0]) begin
-            result = {in[7:0], in[15:8]};
+        if (data_in[15:8] < data_in[7:0]) begin
+            result = {data_in[7:0], data_in[15:8]};
         end else  begin
-            result = in;
+            result = data_in;
         end
         //hd/hw
         4'b1111: 
-        result = in[15] & in[7] + in[14] & in[6] + in[13] & in[5] + in[12] & in[4] + in[11] & in[3] + in[10] & in[2] + in[9] & in[1] + in[8] & in[0];
+        result = data_in[15] & data_in[7] + data_in[14] & data_in[6] + data_in[13] & data_in[5] + data_in[12] & data_in[4] + data_in[11] & data_in[3] + data_in[10] & data_in[2] + data_in[9] & data_in[1] + data_in[8] & data_in[0];
 
 
         //ADD 
         4'b0000:
-            result = in[7:0] + in[15:8];
+            result = data_in[7:0] + data_in[15:8];
         //SUB
         4'b0001:
-            result = in[7:0] - in[15:8];
+            result = data_in[7:0] - data_in[15:8];
         //AND
         4'b0010:
-            result = in[7:0] & in[15:8];
+            result = data_in[7:0] & data_in[15:8];
         //OR
         4'b0011:
-            result = in[7:0] | in[15:8];
+            result = data_in[7:0] | data_in[15:8];
 
         //XOR
         4'b0100:
