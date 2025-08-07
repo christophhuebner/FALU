@@ -42,9 +42,9 @@ module ALU (
 
   wire [7:0] log_approx;
 
-  logarithm_approx log_inst(
-    .a(data_in[15:8]),
-    .log_approx(log_approx)
+  logarithm_approx log_inst (
+      .a(data_in[15:8]),
+      .log_approx(log_approx)
   );
 
   // ALU logic implementation here
@@ -176,16 +176,16 @@ module lod8 (
 );
   always_comb begin
     casez (data_in)
-      8'b1???????: count = 7; // Leading 1 at bit 7
-      8'b01??????: count = 6; // Leading 1 at bit 6
+      8'b1???????: count = 7;  // Leading 1 at bit 7
+      8'b01??????: count = 6;  // Leading 1 at bit 6
       8'b001?????: count = 5;
       8'b0001????: count = 4;
       8'b00001???: count = 3;
       8'b000001??: count = 2;
       8'b0000001?: count = 1;
-      8'b00000001: count = 0; // Leading 1 at bit 0 (LSB)
-      8'b00000000: count = 8; // No bits set
-      default:     count = 8; // fallback
+      8'b00000001: count = 0;  // Leading 1 at bit 0 (LSB)
+      8'b00000000: count = 8;  // No bits set
+      default:     count = 8;  // fallback
     endcase
   end
 endmodule
@@ -193,31 +193,30 @@ endmodule
 
 
 module logarithm_approx (
-  input  wire [7:0] a,
-  output reg  [7:0] log_approx  // 4 integer bits + 4 fractional bits fixed point
+    input  wire [7:0] a,
+    output reg  [7:0] log_approx  // 4 integer bits + 4 fractional bits fixed point
 );
 
   // Position of leading one (0 to 7)
   logic [3:0] position;
-
-  // Instance of your lod8 module (modified to output 4 bits for position)
+  
   lod8 leadingone (
-    .data_in(a),
-    .count(position)
+      .data_in(a),
+      .count  (position)
   );
 
   logic [7:0] shifted;
   logic [3:0] frac;
-always_comb begin
-  // Default assignments (prevents latches)
-  shifted = 0;
-  frac = 0;
-  log_approx = 0;
+  always_comb begin
+    // Default assignments (prevents latches)
+    shifted = 0;
+    frac = 0;
+    log_approx = 0;
 
-  if (a != 0) begin
-    shifted = a << (7 - position);
-    frac = shifted[6:3];
-    log_approx = (position << 4) + frac;
+    if (a != 0) begin
+      shifted = a << (7 - position);
+      frac = shifted[6:3];
+      log_approx = (position << 4) + frac;
+    end
   end
-end
 endmodule
