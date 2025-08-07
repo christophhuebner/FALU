@@ -16,7 +16,7 @@ module divu_int ( // 8 of numbers in bits
     logic [7:0] quo, quo_next;  // intermediate quotient
     logic [8:0] acc, acc_next;    // accumulator (1 bit wider)
     logic [$clog2(8)-1:0] i;      // iteration counter
-    logic inv;                   // inversion flag for signed division
+    logic inv = 0;                   // inversion flag for signed division
     reg divisor_sign; 
     reg dividend_sign;
     reg [7:0] dividend_abs;
