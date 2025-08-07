@@ -21,6 +21,7 @@ module divu_int ( // 8 of numbers in bits
     reg dividend_sign;
     reg [7:0] dividend_abs;
     reg [7:0] divisor_abs;
+    
     // division algorithm iteration
     always_comb begin
         if (acc >= {1'b0, b1}) begin

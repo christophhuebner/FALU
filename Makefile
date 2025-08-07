@@ -1,7 +1,7 @@
 # Makefile created with cocotb_snippets
 
 # Simulator to be used.
-SIM ?= icarus
+SIM ?= verilator
 #EXTRA_ARGS += 
 
 TOPLEVEL_LANG ?= verilog
