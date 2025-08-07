@@ -7,21 +7,22 @@ module ALU (
 );
 
   typedef enum logic [3:0] {
-    OP_ADD   = 4'b0000,
-    OP_SUB   = 4'b0001,
-    OP_AND   = 4'b0010,
-    OP_OR    = 4'b0011,
-    OP_XOR   = 4'b0100,
-    OP_NAND  = 4'b0101,
-    OP_NOR   = 4'b0110,
-    OP_XNOR  = 4'b0111,
-    OP_CLZ   = 4'b1000,
-    OP_MAC   = 4'b1001,
-    OP_SORT  = 4'b1010,
-    OP_DIV   = 4'b1101,
-    OP_CTZ   = 4'b1100,
-    OP_MUL   = 4'b1110,
-    OP_HAMMING = 4'b1111
+    OP_ADD     = 4'b0000,  // 0
+    OP_SUB     = 4'b0001,  // 1
+    OP_AND     = 4'b0010,  // 2
+    OP_OR      = 4'b0011,  // 3
+    OP_XOR     = 4'b0100,  // 4
+    OP_NAND    = 4'b0101,  // 5
+    OP_NOR     = 4'b0110,  // 6
+    OP_XNOR    = 4'b0111,  // 7
+    OP_CLZ     = 4'b1000,  // 8
+    OP_MAC     = 4'b1001,  // 9
+    OP_SORT    = 4'b1010,  // 10
+    OP_LOG     = 4'b1011,  // 11
+    OP_CTZ     = 4'b1100,  // 12
+    OP_DIV     = 4'b1101,  // 13
+    OP_MUL     = 4'b1110,  // 14
+    OP_HAMMING = 4'b1111   // 15
   } alu_op_t;
 
   alu_op_t op_sel;
@@ -38,6 +39,14 @@ module ALU (
       .data_in(data_in[15:8]),
       .count  (ctz_count[3:0])
   );
+
+  wire [7:0] log_approx;
+
+  logarithm_approx log_inst(
+    .a(data_in[15:8]),
+    .log_approx(log_approx)
+  );
+
   // ALU logic implementation here
 
   always_comb begin : ALU_ops
@@ -100,7 +109,9 @@ module ALU (
       //Multiplication
       OP_MUL: result = $signed(data_in[15:8]) * $signed(data_in[7:0]);
 
-    
+      // Approx Logarithm
+      OP_LOG: result = {8'b0, log_approx};
+
 
       //Default
       default: result = 0;
@@ -156,4 +167,57 @@ module ctz8 (
       default:     count = 0;
     endcase
   end
+endmodule
+
+
+module lod8 (
+    input  wire [7:0] data_in,
+    output reg  [2:0] count
+);
+  always_comb begin
+    casez (data_in)
+      8'b1???????: count = 7; // Leading 1 at bit 7
+      8'b01??????: count = 6; // Leading 1 at bit 6
+      8'b001?????: count = 5;
+      8'b0001????: count = 4;
+      8'b00001???: count = 3;
+      8'b000001??: count = 2;
+      8'b0000001?: count = 1;
+      8'b00000001: count = 0; // Leading 1 at bit 0 (LSB)
+      8'b00000000: count = 8; // No bits set
+      default:     count = 8; // fallback
+    endcase
+  end
+endmodule
+
+
+
+module logarithm_approx (
+  input  wire [7:0] a,
+  output reg  [7:0] log_approx  // 4 integer bits + 4 fractional bits fixed point
+);
+
+  // Position of leading one (0 to 7)
+  logic [3:0] position;
+
+  // Instance of your lod8 module (modified to output 4 bits for position)
+  lod8 leadingone (
+    .data_in(a),
+    .count(position)
+  );
+
+  logic [7:0] shifted;
+  logic [3:0] frac;
+always_comb begin
+  // Default assignments (prevents latches)
+  shifted = 0;
+  frac = 0;
+  log_approx = 0;
+
+  if (a != 0) begin
+    shifted = a << (7 - position);
+    frac = shifted[6:3];
+    log_approx = (position << 4) + frac;
+  end
+end
 endmodule
