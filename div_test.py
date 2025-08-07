@@ -16,7 +16,7 @@ async def test_division(dut):
     await ClockCycles(dut.clk, 2, rising=True)
 
     dut.a.value = 9
-    dut.b.value = 10
+    dut.b.value = 2
     dut.start.value = 0b1
     await ClockCycles(dut.clk, 1, rising=True)
     dut.start.value = 0b0
