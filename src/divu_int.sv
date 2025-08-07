@@ -19,16 +19,11 @@ module divu_int (
 
     // division algorithm iteration
     always_comb begin
-        // Shift acc and quo left by 1, bring in next quotient bit as 0
-        logic [8:0] acc_shifted = {acc[7:0], quo[7]};
-        logic [7:0] quo_shifted = {quo[6:0], 1'b0};
-
-        if (acc_shifted >= {1'b0, b1}) begin
-            acc_next = acc_shifted - {1'b0, b1};
-            quo_next = {quo_shifted[6:0], 1'b1}; // Set LSB to 1
+        if (acc >= {1'b0, b1}) begin
+            acc_next = acc - b1;
+            {acc_next, quo_next} = {acc_next[7:0], quo, 1'b1};
         end else begin
-            acc_next = acc_shifted;
-            quo_next = quo_shifted; // LSB remains 0
+            {acc_next, quo_next} = {acc, quo} << 1;
         end
     end
 
