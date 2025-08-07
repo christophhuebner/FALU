@@ -19,3 +19,7 @@
 | [ ]      | 1101   | Division(x)           |
 | [ ]      | 1110   | Multiplication(x)     |
 | [ ]      | 1111   | Hamming Distance/Weight(x) |
+
+
+## Simulation
+Create a virtual environment.\\
