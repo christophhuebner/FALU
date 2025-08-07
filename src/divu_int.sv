@@ -45,10 +45,7 @@ module divu_int ( // 8 of numbers in bits
             inv <= 1;
             end else
             begin
-            divisor_sign <= b[7];
-            dividend_sign <= a[7];
-            divisor_abs <= divisor_sign ? -b : b;
-            dividend_abs <= dividend_sign ? -a : a;
+ 
             valid <= 0;
             i <= 0;
             if (b == 0) begin  // catch divide by zero
