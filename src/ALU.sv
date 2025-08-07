@@ -198,8 +198,8 @@ module logarithm_approx (
 );
 
   // Position of leading one (0 to 7)
-  logic [3:0] position;
-  
+  reg [3:0] position;
+
   lod8 leadingone (
       .data_in(a),
       .count  (position)
@@ -207,6 +207,7 @@ module logarithm_approx (
 
   logic [7:0] shifted;
   logic [3:0] frac;
+  
   always_comb begin
     // Default assignments (prevents latches)
     shifted = 0;

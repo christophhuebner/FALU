@@ -286,6 +286,6 @@ async def test_logarithm(dut):
         await Timer(2, "ns")
         out_value = str(dut.result.value.binstr)[-8:]
         approx_value = fixed_point_to_float(int(out_value,2))
-        dut._log.info(f"Output for log_2({a}) is {approx_value}")
+        #dut._log.info(f"Output for log_2({a}) is {approx_value}")
         
 
