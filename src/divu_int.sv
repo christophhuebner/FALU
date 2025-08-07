@@ -1,4 +1,4 @@
-module divu_int # ( // 8 of numbers in bits
+module divu_int ( // 8 of numbers in bits
     input wire logic clk,              // clock
     input wire logic rst,              // reset
     input wire logic start,            // start calculation
