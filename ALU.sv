@@ -47,7 +47,6 @@ module ALU #(
 
 
         
-<<<<<<< HEAD
         default:
         result = 0
     
@@ -55,11 +54,5 @@ module ALU #(
     end
 
 
-=======
-        default: result = 0;
-    endcase
-    end
-    if
->>>>>>> refs/remotes/origin/main
 endmodule
 
