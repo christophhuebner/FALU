@@ -7,17 +7,17 @@ def to_signed(val, bits):
 
 clz_test_vectors = {
         0b00000000: 8,
-        0b10000000: 7,
-        0b01000000: 6,
-        0b00100000: 5,
-        0b00010000: 4,
-        0b00001000: 3,
-        0b00000100: 2,
-        0b00000010: 1,
-        0b00000001: 0,
+        0b10000000: 0,
+        0b01000000: 1,
+        0b00100000: 2,
+        0b00010000: 3,
+        0b00001000: 4,
+        0b00000100: 5,
+        0b00000010: 6,
+        0b00000001: 7,
         0b11111111: 0,
-        0b01111111: 0,
-        0b00001111: 0,
+        0b01111111: 1,
+        0b00001111: 4,
     }
 
 
@@ -66,7 +66,7 @@ def hamming_distance_model(a,b):
 
 
 
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_mac(dut):
     dut.op.value = 0b1001
     for a in range(16):
@@ -82,7 +82,7 @@ async def test_mac(dut):
                 assert actual == expected, f"Mismatch for A={a} B={b} C={c}: got {actual}, expected {expected}"
                
 
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_sort(dut):
     '''Test the sorting number'''
     dut.op.value = 0b1010
@@ -96,7 +96,7 @@ async def test_sort(dut):
             assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
                
 
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_hamming_distance(dut):
     '''Test Hamming distance'''
     dut.op.value = 0b1111
@@ -111,7 +111,7 @@ async def test_hamming_distance(dut):
             assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
            
 
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_addition(dut):
     '''Test Addition'''
     dut.op.value = 0b0000
@@ -124,7 +124,7 @@ async def test_addition(dut):
             expected = a + b
             assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
            
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_subtraction(dut):
     '''Test Subtraction'''
     dut.op.value = 0b0001
@@ -137,7 +137,7 @@ async def test_subtraction(dut):
             expected = a - b
             assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
            
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_and(dut):
     '''Test And'''
     dut.op.value = 0b0010
@@ -150,7 +150,7 @@ async def test_and(dut):
             expected = (a & 0xFF) & (b & 0xFF)
             assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
       
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_or(dut):
     '''Test Or'''
     dut.op.value = 0b0011
@@ -163,7 +163,7 @@ async def test_or(dut):
             expected = (a & 0xFF) | (b & 0xFF)
             assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
       
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_xor(dut):
     '''Test Xor'''
     dut.op.value = 0b0100
@@ -176,7 +176,7 @@ async def test_xor(dut):
             expected = (a & 0xFF) ^ (b & 0xFF)
             assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
       
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_nand(dut):
     '''Test NAND'''
     dut.op.value = 0b0101
@@ -190,7 +190,7 @@ async def test_nand(dut):
             assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
       
 
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_nor(dut):
     '''Test Nor'''
     dut.op.value = 0b0110
@@ -204,7 +204,7 @@ async def test_nor(dut):
             assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
 
 
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_xnor(dut):
     '''Test XNOR'''
     dut.op.value = 0b0111
@@ -218,18 +218,18 @@ async def test_xnor(dut):
             assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
 
 
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_clz(dut):
     '''Test CLZ'''
     dut.op.value = 0b1000
-    a = 0b00000000
+    b = 0b00000000
     for vector in clz_test_vectors:
-        merged = (vector << 8) | a
+        merged = (vector << 8) | b
         dut.data_in.value = merged
         await Timer(2, "ns")
         expected = clz_test_vectors[vector]
         actual = dut.result.value.integer
-        assert actual == expected, f"Mismatch for A={a}: got {actual}, expected {expected}"
+        assert actual == expected, f"Mismatch for A={vector}: got {actual}, expected {expected}"
 
         
 @cocotb.test()
@@ -245,4 +245,35 @@ async def test_ctz(dut):
         actual = dut.result.value.integer
         assert actual == expected, f"Mismatch for A={vector}: got {actual}, expected {expected}"
 
-       
+
+
+@cocotb.test()
+async def test_multiplication(dut):
+    '''Test Addition'''
+    dut.op.value = 0b1110
+    for a in range(-128, 128):
+        for b in range(-128,128):
+            merged = ((a & 0xFF )<< 8) | (b & 0xFF)
+            dut.data_in.value = merged
+            await Timer(2, "ns")
+            actual = dut.result.value.signed_integer
+            expected = a * b
+            assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
+
+
+
+@cocotb.test()
+async def test_division(dut):
+    '''Test Addition'''
+    dut.op.value = 0b1101
+    for a in range(-128, 128):
+        for b in range(-128,128):
+            merged = ((a & 0xFF )<< 8) | (b & 0xFF)
+            dut.data_in.value = merged
+            await Timer(2, "ns")
+            actual = dut.result.value.signed_integer
+            if (b != 0):
+                expected = int(a / b)
+            else:
+                expected = -1
+            assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"

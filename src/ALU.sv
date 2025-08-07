@@ -38,7 +38,7 @@ module ALU (
         end
         //hd/hw
         4'b1111: 
-        result =16'b0 | ((data_in[15] ^ data_in[7]) +
+        result =16'b0 + ((data_in[15] ^ data_in[7]) +
                 (data_in[14] ^ data_in[6]) +
                 (data_in[13] ^ data_in[5]) +
                 (data_in[12] ^ data_in[4]) +
@@ -85,16 +85,17 @@ module ALU (
             result = { 12'b0, ctz_count};
         //Mult
         4'b1110:
-        result = data_in[15:8] * data_in[7:0];
+        result = $signed(data_in[15:8]) * $signed(data_in[7:0]);
 
         //Div
         4'b1101: begin
             if (data_in[7:0] != 0) begin
-                result = data_in[15:8] / data_in[7:0];
+                result = $signed(data_in[15:8]) / $signed(data_in[7:0]);
             end else begin
                 result = 16'hFFFF; // Division by zero, return max value
             end
         end
+
         //
         default:
         result = 0;
@@ -110,8 +111,8 @@ endmodule
 
 
 module clz8(
-    input wire signed [7:0] data_in,
-    output reg signed [3:0] count
+    input wire  [7:0] data_in,
+    output reg  [3:0] count
 );
     always_comb begin
         casez (data_in)
