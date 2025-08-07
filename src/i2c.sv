@@ -11,7 +11,7 @@ module I2C_Controller (
 );
 	
 	reg [4:0] counter;
-  reg [1:0] state = 0;
+    reg [1:0] state = 0;
 	reg [19:0] data_in = 0;
    
 	
@@ -58,6 +58,4 @@ module I2C_Controller (
 			endcase
 		end
 	end
-	
-
 endmodule
