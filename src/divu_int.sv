@@ -38,10 +38,10 @@ module divu_int ( // 8 of numbers in bits
 
         if (start) begin
             if(!inv)begin
-            divisor_sign <= b[7];
-            dividend_sign <= a[7];
-            divisor_abs <= divisor_sign ? -b : b;
-            dividend_abs <= dividend_sign ? -a : a;
+            divisor_sign = b[7];
+            dividend_sign = a[7];
+            divisor_abs = divisor_sign ? -b : b;
+            dividend_abs = dividend_sign ? -a : a;
             inv <= 1;
             end else
             begin
@@ -59,7 +59,7 @@ module divu_int ( // 8 of numbers in bits
                 {acc, quo} <= {{8{1'b0}}, dividend_abs, 1'b0};  // initialize calculation
             end
             end
-        end else if (busy & !start) begin
+        end else if (busy) begin
             if (i == 7) begin  // we're done
                 busy <= 0;
                 done <= 1;
