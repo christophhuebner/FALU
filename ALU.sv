@@ -1,7 +1,7 @@
 module ALU (
     input wire signed [15:0] data_in, // First operand
     input wire signed [3:0] op,   // Operation selector
-    output wire signed [15:0] result,
+    output reg signed [15:0] result,
     output wire              zero, // Zero flag
     output wire              busy
 );
@@ -20,12 +20,12 @@ module ALU (
 
     always_comb begin : ALU_ops
     
-    zero = 0;
+        zero = 0;
         case(op)
 
         //mac
         4'b1001:
-        {carry,result} = data_in[15:12] * data_in[11:8] + {8'b0, data_in[7:0]};
+        result = data_in[15:12] * data_in[11:8] + {8'b0, data_in[7:0]};
         //sort
         4'b1010:
         if (data_in[15:8] < data_in[7:0]) begin

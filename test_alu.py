@@ -32,7 +32,10 @@ def mac_model(a,b,c):
     pass
 
 def sort_model(a,b):
-    pass
+    if a < b:
+        return (b << 8) | a
+    else:
+        return (a << 8) | b
 
 def approx_log_model(a):
     pass
@@ -47,7 +50,7 @@ def multiplication_model(a,b):
     pass
 
 def hamming_distance_model(a,b):
-    pass
+    return bin(a ^ b).count('1')
 
 
 
@@ -66,3 +69,34 @@ async def test_mac(dut):
                 
                 assert actual == expected, f"Mismatch for A={a} B={b} C={c}: got {actual}, expected {expected}"
                
+
+@cocotb.test()
+async def test_sort(dut):
+    '''Test the sorting number'''
+    dut.op.value = 0b1010
+    for a in range(256):
+        for b in range(256):
+            merged = (a << 8) | b
+            dut.data_in.value = merged
+            await Timer(2, "ns")
+            expected = sort_model(a,b)
+            actual = dut.result.value.integer
+            assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
+               
+
+@cocotb.test()
+async def test_hamming_distance(dut):
+    '''Test Hamming distance'''
+    dut.op.value = 0b1111
+
+    for a in range(256):
+        for b in range (256):
+            expected = hamming_distance_model(a,b)
+            merged = (a << 8) | b
+            dut.data_in.value = merged
+            await Timer(2, "ns")
+            actual = dut.result.value.integer
+            assert actual == expected, f"Mismatch for A={a} B={b}: got {actual}, expected {expected}"
+           
+
+
