@@ -10,13 +10,13 @@ module I2C_Controller (
 	output  reg sda_o
 );
 	
-	reg [4:0] counter;
+	reg [4:0] counter = 0;
     reg [1:0] state = 0;
 	reg [19:0] data_in = 0;
    
 	
 	always @(posedge scl) begin
-		if (reset ==1) begin
+		if (reset == 1) begin
 			state <= 0;
 			counter <= 0;
 			data_in <= 0;
@@ -29,8 +29,8 @@ module I2C_Controller (
                         state <= 1;
                     end
                     else begin
-                        counter <= 15;
-                    state <= 2;
+                        counter <= 16;
+                    	state <= 2;
                     end
                   end
 				end
@@ -43,9 +43,13 @@ module I2C_Controller (
 				end
 						
 				2: begin
-					if(counter == 0) state <= 0;
-					else begin counter <= counter - 1;
-                    sda_o <= result[counter];
+					if(counter == 0)
+					begin
+						state <= 0;
+					end
+					else begin 
+                    sda_o <= result[counter-1];
+					counter <= counter - 1;
                 end	
                 end
                   3: begin
