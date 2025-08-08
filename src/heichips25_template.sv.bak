@@ -22,10 +22,9 @@ assign uio_out = 8'b00000000; // Initialize IO outputs to zero
 
 FALU_top falutop (
     .clk(clk),
-    .reset(rst_n),  // Active low reset
+    .reset(~rst_n),  // Active low reset
     .start(ui_in[0]),  // Start signal from ui_in[0]
     .wr(ui_in[1]),     // Write signal from ui_in[1]
-    //.i2c_clk(clk),  // I2C clock input
     .i2c_clk(ui_in[2]),  // I2C clock input
     .i2c_sda_i(ui_in[3]), // I2C data input
     .i2c_sda_o(uo_out[0]) // I2C data output
@@ -33,7 +32,8 @@ FALU_top falutop (
 
 endmodule
 
-// FALU TOP START
+
+
 module FALU_top(
     input wire clk,
     input wire reset,
@@ -50,7 +50,7 @@ module FALU_top(
 
     reg                busy;
     wire signed [15:0] data_in;
-    wire  [3:0]  op;
+    wire [3:0]  op;
 
     reg                divide;
     reg  signed [7:0]  dividend;
@@ -130,17 +130,11 @@ module FALU_top(
     end
 
 endmodule
-
-// FALU TOP END
-
-
-// ALU START
-
 module ALU (
     input wire signed [15:0] data_in,  // First operand
     input wire [3:0] op,  // Operation selector
     output reg signed [15:0] result,
-    output wire zero,  // Zero flag
+    output reg zero,  // Zero flag
     output wire busy
 );
 
@@ -189,7 +183,7 @@ module ALU (
 
   always_comb begin : ALU_ops
 
-    zero   = '0;
+    zero   <= '0;
     result = '0;
     op_sel = alu_op_t'(op);
 
@@ -257,7 +251,7 @@ module ALU (
     endcase  // op_sel
 
     if (result == 0) begin
-      zero = 1;
+      zero <= 1;
     end
 
   end  // ALU_Ops
@@ -328,8 +322,6 @@ module lod8 (
   end
 endmodule
 
-
-
 module logarithm_approx (
     input  wire [7:0] a,
     output reg  [7:0] log_approx  // 4 integer bits + 4 fractional bits fixed point
@@ -359,76 +351,6 @@ module logarithm_approx (
     end
   end
 endmodule
-
-// ALU END
-
-
-// I2C Controller start
-
-module I2C_Controller (
-    input  wire scl,
-    input  wire sda_i,
-    input wire reset,
-    input reg [15:0] result,
-    input wire start,
-    input wire w_r,
-    output reg [15:0] data_out, 
-    output  reg [3:0]  op,
-	output  reg sda_o
-);
-	
-	reg [4:0] counter = 0;
-    reg [1:0] state = 0;
-	reg [19:0] data_in = 0;
-   
-	
-	always @(posedge scl) begin
-		if (reset == 1) begin
-			state <= 0;
-			counter <= 0;
-			data_in <= 0;
-		end else begin
-			case(state)			
-				0: begin
-                  if (start == 1) begin
-                    if(w_r == 0) begin
-                        counter <= 19; 
-                        state <= 1;
-                    end
-                    else begin
-                        counter <= 16;
-                    state <= 2;
-                    end
-                  end
-				end
-				1: begin
-					data_in[counter] <= sda_i;
-					if(counter == 0) begin
-						state <= 3;
-					end else counter <= counter - 1;
-				end
-				2: begin
-					if(counter == 0) state <= 0;
-					else begin 
-                    sda_o <= result[counter-1];
-					counter <= counter - 1;
-                end	
-                end
-                  3: begin
-					state <= 0;	
-                   op <= data_in[19:16];
-                    data_out <= data_in[15:0];
-            	end				
-			endcase
-		end
-	end
-endmodule
-
-// I2C Controller end
-
-
-// DIV START
-
 
 module divu_int ( 
     input wire logic clk,              // clock
@@ -499,4 +421,61 @@ module divu_int (
     end
 endmodule
 
-// DIV END
+module I2C_Controller (
+    input  wire scl,
+    input  wire sda_i,
+    input wire reset,
+    input reg [15:0] result,
+    input wire start,
+    input wire w_r,
+    output reg [15:0] data_out, 
+    output  reg [3:0]  op,
+	output  reg sda_o
+);
+	
+	reg [4:0] counter;
+    reg [1:0] state = 0;
+	reg [19:0] data_in = 0;
+   
+
+	always @(posedge scl) begin
+		if (reset == 1) begin
+			state <= 0;
+			counter <= 0;
+			data_in <= 0;
+		end else begin
+			case(state)			
+				0: begin
+                  if (start == 1) begin
+                    if(w_r == 0) begin
+                        counter <= 19; 
+                        state <= 1;
+                    end
+                    else begin
+                        counter <= 16;
+                    state <= 2;
+                    end
+                  end
+				end
+				1: begin
+					data_in[counter] <= sda_i;
+					if(counter == 0) begin
+						state <= 3;
+					end else counter <= counter - 1;
+				end
+				2: begin
+					if(counter == 0) state <= 0;
+					else begin 
+                    sda_o <= result[counter-1];
+					counter <= counter - 1;
+                end	
+                end
+                  3: begin
+					state <= 0;	
+                   op <= data_in[19:16];
+                    data_out <= data_in[15:0];
+            	end				
+			endcase
+		end
+	end
+endmodule
