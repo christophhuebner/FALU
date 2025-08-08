@@ -27,5 +27,18 @@ async def test_division(dut):
     dut._log.info(f"Result Valid: {dut.valid.value} quotient: {dut.val.value.integer} remainder: {dut.rem.value.integer}")
 
 
+    
+    dut.a.value = 255
+    dut.b.value = 255
+    dut.start.value = 0b1
+    await ClockCycles(dut.clk, 4, rising=True)
+    dut.start.value = 0b0
+
+    while (dut.busy.value == 0b1):
+        await ClockCycles(dut.clk, 1, rising=True)
+        dut._log.info(f"Waiting {dut.valid.value}")
+    dut._log.info(f"Result Valid: {dut.valid.value} quotient: {dut.val.value.integer} remainder: {dut.rem.value.integer}")
+
+
 
     
