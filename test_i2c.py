@@ -35,12 +35,14 @@ async def test_falu_i2c_r(dut):
     actual = dut.data_out.value.integer
     
     assert actual == expected, f"got {actual}, expected {expected}"
+    print(dut.data_out.value)
+    print(dut.op.value)
 
 
 @cocotb.test()
 async def test_falu_i2c_w(dut):
     ops = 0b0011
-    a = 0b00000111
+    a = 0b0000011101001010
     b = 0b01001010
     c = Clock(dut.scl, 5, "ns")
     await cocotb.start(c.start())
@@ -68,4 +70,6 @@ async def test_falu_i2c_w(dut):
     actual = dut.data_out.value.integer
     
     assert actual == expected, f"got {actual}, expected {expected}"
+    print(dut.data_out.value)
+    print(dut.op.value)
     
