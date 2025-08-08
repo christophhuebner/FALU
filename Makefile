@@ -9,8 +9,11 @@ alu:
 falu:
 	make -f falu_test.mk
 
-librelane:
-	make -f make_libre.mk
+librelane-macro:
+	make -f make_libre.mk macro
+
+librelane-macro-openroad:
+	make -f make_libre.mk macro-openroad
 
 i2c:
 	make -f i2c_test.mk

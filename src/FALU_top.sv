@@ -43,7 +43,7 @@ module FALU_top(
         .reset(reset),
         .data_out(data_in),
         .op(op),
-        .result(result), // top-level result is sent to I2C
+        .result(alu_result), // top-level result is sent to I2C
         .start(start),
         .w_r(wr)
     );
