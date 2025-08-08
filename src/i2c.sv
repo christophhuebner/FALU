@@ -6,8 +6,12 @@ module I2C_Controller (
     input start,
     input w_r,
     output reg [15:0] data_out, 
+<<<<<<< HEAD
+    output  reg [3:0]  op
+=======
     output  reg [3:0]  op,
 	output  reg sda_o
+>>>>>>> 1e4c6e06b8a50ca3be0ca1f4f8e5f2a3a8689433
 );
 	
 	reg [4:0] counter;
