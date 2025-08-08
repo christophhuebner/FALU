@@ -29,32 +29,29 @@ module I2C_Controller (
                         state <= 1;
                     end
                     else begin
-                        counter <= 15;
+                        counter <= 16;
                     state <= 2;
                     end
                   end
 				end
-				
 				1: begin
 					data_in[counter] <= sda_i;
 					if(counter == 0) begin
 						state <= 3;
 					end else counter <= counter - 1;
 				end
-						
 				2: begin
 					if(counter == 0) state <= 0;
-					else begin counter <= counter - 1;
-                    sda_o <= result[counter];
+					else begin 
+                    sda_o <= result[counter-1];
+					counter <= counter - 1;
                 end	
                 end
                   3: begin
 					state <= 0;	
                    op <= data_in[19:16];
                     data_out <= data_in[15:0];
-            	end
-				
-				
+            	end				
 			endcase
 		end
 	end
