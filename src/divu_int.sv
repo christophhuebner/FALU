@@ -48,7 +48,6 @@ module divu_int (
                 busy <= 0;
                 done <= 1;
                 valid <= 1;
-                i <= i+1;
                 val <= quo_next;
                 rem <= acc_next[8:1];  // undo final shift
             end else begin  // next iteration
@@ -57,12 +56,6 @@ module divu_int (
                 quo <= quo_next;
             end
         end 
-        if(i==8)begin
-            acc_next = 0;
-            quo_next = 0;
-            acc <= 0;
-            quo <= 0;
-        end
         if (rst) begin
             busy <= 0;
             done <= 0;

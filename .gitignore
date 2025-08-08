@@ -12,6 +12,9 @@ runs/
 *.elf
 *.bin
 *.hex
+dump/
+*.vcd
+results.xml
 
 ice40hx8k.json
 ice40hx8k.asc

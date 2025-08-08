@@ -1,0 +1,6 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1754640174" />
+    <testcase name="test_division" classname="div_test" file="/home/user/open_tools/heichips25-template/FALU/div_test.py" lineno="7" time="0.004555225372314453" sim_time_ns="31.001" ratio_time="6805.590825081126" />
+  </testsuite>
+</testsuites>
