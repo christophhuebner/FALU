@@ -48,7 +48,7 @@ module FALU_top # (
         .start(start),
         .w_r(wr)
     );
-    
+
     divu_int div_inst (
         .clk(clk),
         .rst(reset),
