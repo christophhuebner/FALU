@@ -15,8 +15,8 @@ module FALU_top # (
     wire signed [15:0] data_in;
     wire signed [3:0] op;
     reg divide;
-    wire signed [7:0] dividend;
-    wire signed [7:0] divisor;
+    reg signed [7:0] dividend;
+    reg signed [7:0] divisor;
     wire signed [7:0] quotient;
     wire signed [7:0] remainder;
     wire division_done;
