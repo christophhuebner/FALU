@@ -47,6 +47,10 @@ async def test_falu(dut):
         dut._log.info(f"{dut.i2c_inst.data_out.value.signed_integer}")
 
     await ClockCycles(dut.i2c_clk, 2, rising=True)
+
+    for i in range(5):
+        print(dut.data_in.value)
+        print(dut.op.value)
     
 
 
