@@ -1,6 +1,4 @@
-`include "ALU.sv"
-`include "i2c.sv"
-`include "divu_int.sv"
+
 module FALU_top # (
 )(
     input wire clk,
@@ -23,8 +21,9 @@ module FALU_top # (
     wire signed [7:0] remainder;
     wire division_done;
     wire division_busy;
+
     ALU alu_inst (
-        .data_IN(data_in),
+        .data_in(data_in),
         .op(op),
         .result(result),
         .zero(zero),            // Connect to appropriate output
@@ -40,9 +39,7 @@ module FALU_top # (
         .op(op),
         .result(result),
         .start(start),
-        .w_r(wr),
-        .data_out(data_in),
-        .op(op)
+        .w_r(wr)
     );
     
     divu_int div_inst (
@@ -58,6 +55,7 @@ module FALU_top # (
         .val(quotient),      // Quotient
         .rem(remainder)             // Remainder (not used here)
     );
+    
     always @(posedge clk) begin
         if (!reset) begin
             result <= 0;
