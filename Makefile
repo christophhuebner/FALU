@@ -12,6 +12,8 @@ falu:
 librelane:
 	make -f make_libre.mk
 
+i2c:
+	make -f i2c_test.mk
 clean:
 	make -f div_test.mk clean
 	make -f alu_test.mk clean
