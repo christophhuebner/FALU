@@ -22,7 +22,7 @@ module divu_int (
         if (acc >= {1'b0, b1}) begin
             acc_next = acc - b1;
             {acc_next, quo_next} = {acc_next[7:0], quo, 1'b1};
-        end else begin
+        end  else begin
             {acc_next, quo_next} = {acc, quo} << 1;
         end
     end
@@ -48,6 +48,7 @@ module divu_int (
                 busy <= 0;
                 done <= 1;
                 valid <= 1;
+                i <= i+1;
                 val <= quo_next;
                 rem <= acc_next[8:1];  // undo final shift
             end else begin  // next iteration
@@ -55,12 +56,12 @@ module divu_int (
                 acc <= acc_next;
                 quo <= quo_next;
             end
-        end else begin
-            acc_next <= 0;
-            quo_next <= 0;
+        end 
+        if(i==8)begin
+            acc_next = 0;
+            quo_next = 0;
             acc <= 0;
             quo <= 0;
-
         end
         if (rst) begin
             busy <= 0;
