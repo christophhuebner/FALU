@@ -14,7 +14,7 @@ module FALU_top(
 
     reg                busy;
     wire signed [15:0] data_in;
-    wire [3:0]  op;
+    wire  [3:0]  op;
 
     reg                divide;
     reg  signed [7:0]  dividend;
@@ -27,10 +27,11 @@ module FALU_top(
     // ALU output wires
     wire signed [15:0] alu_result;
     wire               alu_zero;
-
+    reg [15:0] alu_data_in;
+    reg [3:0] alu_op;
     ALU alu_inst (
-        .data_in(data_in),
-        .op(op),
+        .data_in(alu_data_in),
+        .op(alu_op),
         .result(alu_result),
         .zero(alu_zero),
         .busy(busy)
@@ -43,7 +44,7 @@ module FALU_top(
         .reset(reset),
         .data_out(data_in),
         .op(op),
-        .result(alu_result), // top-level result is sent to I2C
+        .result(result), // top-level result is sent to I2C
         .start(start),
         .w_r(wr)
     );
@@ -63,11 +64,12 @@ module FALU_top(
     );
     
     always @(posedge clk) begin
-        if (!reset) begin
+        if (reset) begin
             result <= 0;
             zero   <= 0;
             divide <= 0;
         end else begin
+
             if (op == 4'b1101) begin
                 // Division operation
                 divide   <= 1;
@@ -82,6 +84,8 @@ module FALU_top(
                 end
             end else begin
                 // Normal ALU operation
+                alu_data_in <= data_in;
+                alu_op      <= op;
                 result <= alu_result;
                 zero   <= alu_zero;
                 divide <= 0;
