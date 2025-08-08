@@ -207,7 +207,7 @@ module logarithm_approx (
 
   logic [7:0] shifted;
   logic [3:0] frac;
-  
+
   always_comb begin
     // Default assignments (prevents latches)
     shifted = 0;
