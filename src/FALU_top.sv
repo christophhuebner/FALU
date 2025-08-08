@@ -5,8 +5,11 @@ module FALU_top # (
 )(
     input wire clk,
     input wire reset,
+    input wire start,
+    input wire wr,
     input wire i2c_clk,
-    inout wire i2c_sda
+    input wire i2c_sda_i,
+    output wire i2c_sda_o
 );
     reg signed [15:0] result;
     reg zero;
@@ -30,11 +33,18 @@ module FALU_top # (
 
     I2C_Controller i2c_inst (
         .scl(i2c_clk),
-        .sda(i2c_sda),
+        .sda_i(i2c_sda_i),
+        .sda_o(i2c_sda_o),
         .reset(reset),
+        .data_out(data_in),
+        .op(op),
+        .result(result),
+        .start(start),
+        .w_r(wr),
         .data_out(data_in),
         .op(op)
     );
+    
     divu_int div_inst (
         .clk(clk),
         .rst(reset),
