@@ -41,10 +41,9 @@ module FALU_top # (
         .result(result),
         .start(start),
         .w_r(wr),
-        .data_out(data_in),
         .op(op)
     );
-    
+
     divu_int div_inst (
         .clk(clk),
         .rst(reset),
@@ -78,20 +77,6 @@ module FALU_top # (
         end
     end
     end
-    /*
-    I2C_Controller i2c_input (
-        .clk(clk),
-        .data_in(),
-        .data_out()
-    );
-
-    I2C_Controller i2c_output (
-        .clk(clk),
-        .data_in(),
-        .data_out()
-    );
-
-    */
 
 
 endmodule
