@@ -1,10 +1,13 @@
 __pycache__
 sim_build
 venv
+dump
 
 __pycache__/
 sim_build/
 runs/
+dump/
+
 *.vvp
 *.fst
 *.a
@@ -12,7 +15,7 @@ runs/
 *.elf
 *.bin
 *.hex
-dump/
+
 *.vcd
 results.xml
 
