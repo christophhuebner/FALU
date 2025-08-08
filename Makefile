@@ -15,6 +15,9 @@ librelane-macro:
 librelane-macro-openroad:
 	make -f make_libre.mk macro-openroad
 
+ibrelane-macro-final:
+	make -f make_libre.mk macro copy-final
+
 i2c:
 	make -f i2c_test.mk
 clean:

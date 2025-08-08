@@ -96,7 +96,7 @@ module FALU_top(
     );
     
     always @(posedge clk) begin
-        if (!reset) begin
+        if (reset) begin
             result <= 0;
             zero   <= 0;
             divide <= 0;
