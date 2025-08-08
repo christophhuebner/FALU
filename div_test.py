@@ -22,16 +22,16 @@ async def test_division(dut):
     dut.b.value = b
 
     dut.start.value = 0b1
-    await ClockCycles(dut.clk, 1, rising=True)
+    await ClockCycles(dut.clk, 2, rising=True)
     dut.start.value = 0b0
 
     while (dut.busy.value == 0b1):
         await ClockCycles(dut.clk, 1, rising=True)
                 #dut._log.info(f"Waiting {dut.valid.value}")
     dut._log.info(f"Result1 a: {a} b: {b} quotient: {dut.val.value.integer} remainder: {dut.rem.value.integer}")
-    
+
     dut.start.value = 0b1
-    await ClockCycles(dut.clk, 1, rising=True)
+    await ClockCycles(dut.clk, 2, rising=True)
     dut.start.value = 0b0
 
     
