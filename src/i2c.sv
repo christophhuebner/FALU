@@ -1,14 +1,13 @@
 module I2C_Controller (
     input  wire scl,
     input  wire sda_i,
-    output  reg sda_o,
     input reset,
     input[15:0] result,
     input start,
     input w_r,
     output reg [15:0] data_out, 
     output  reg [3:0]  op,
-	output  wire sda_o,
+	output  reg sda_o
 );
 	
 	reg [4:0] counter;
