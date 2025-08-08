@@ -1,6 +1,0 @@
-<testsuites name="results">
-  <testsuite name="all" package="all">
-    <property name="random_seed" value="1754588335" />
-    <testcase name="test_division" classname="div_test" file="/Users/amritsharmapoudel/Desktop/FALU/div_test.py" lineno="7" time="14.974500894546509" sim_time_ns="358404.001" ratio_time="23934.286927087192" />
-  </testsuite>
-</testsuites>
