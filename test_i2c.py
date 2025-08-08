@@ -52,7 +52,7 @@ async def test_falu_i2c_w(dut):
 
     for i in range(20):
         dut.sda_i.value = (d_in >> 19-i) & 1
-        await ClockCycles(dut.scl, 1, rising=True)
+        await ClockCycles(dut.scl, 2, rising=True)
         print(dut.data_out.value)
 
 
