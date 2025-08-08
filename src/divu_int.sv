@@ -55,6 +55,12 @@ module divu_int (
                 acc <= acc_next;
                 quo <= quo_next;
             end
+        end else begin
+            acc_next <= 0;
+            quo_next <= 0;
+            acc <= 0;
+            quo <= 0;
+
         end
         if (rst) begin
             busy <= 0;
