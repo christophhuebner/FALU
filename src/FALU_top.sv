@@ -1,5 +1,4 @@
-module FALU_top # (
-)(
+module FALU_top(
     input wire clk,
     input wire reset,
     input wire start,

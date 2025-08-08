@@ -26,5 +26,6 @@ Create a virtual environment.\\
 
 
 ## Building for yosys
-morty src/FALU_top.sv > src/heiChips25_FALU_top_pickled.sv
+in src:
+morty FALU_top.sv ALU.sv i2c.sv > heiChips25_FALU_top_pickled.sv
 sv2v 
