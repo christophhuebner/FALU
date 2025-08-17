@@ -397,7 +397,7 @@ module I2C_Controller (
                     end
                     else begin
                         counter <= 16;
-                    state <= 2;
+                        state <= 2;
                     end
                   end
 				end

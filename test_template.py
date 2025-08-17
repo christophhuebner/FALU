@@ -52,10 +52,11 @@ async def test_falu(dut):
     dut.ui_in[1].value = 0b1
     await ClockCycles(dut.clk, 2, rising=True)
 
-    # start writing data
+    # start reading data
     dut.ui_in[0].value = 0b1
     await ClockCycles(dut.clk, 2, rising=True)
     dut.ui_in[0].value = 0b0
+
     dut._log.info(f"--------")
     x = ""
     for i in range(17):
@@ -64,6 +65,9 @@ async def test_falu(dut):
        await ClockCycles(dut.clk, 1, rising=True)
     
     dut._log.info(x)
+
+    await ClockCycles(dut.clk, 10, rising=True)
+
 
     
 
