@@ -46,7 +46,7 @@ async def test_falu(dut):
     await ClockCycles(dut.clk, 1, rising=True)
     dut.ui_in[1].value = 1  # Read mode
     dut.ui_in[0].value = 1  # Raise start signal
-    await ClockCycles(dut.clk, 1, rising=True)
+    await ClockCycles(dut.clk, 2, rising=True)
     dut.ui_in[0].value = 0  # Lower start signal
     dut.ui_in[1].value = 0  # Clear read signal
 
