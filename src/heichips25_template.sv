@@ -22,7 +22,7 @@ assign uio_out = 8'b00000000; // Initialize IO outputs to zero
 
 FALU_top falutop (
     .clk(clk),
-    .reset(rst_n),  // Active low reset
+    .reset(~rst_n),  // Active low reset
     .start(ui_in[0]),  // Start signal from ui_in[0]
     .wr(ui_in[1]),     // Write signal from ui_in[1]
     //.i2c_clk(clk),  // I2C clock input

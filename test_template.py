@@ -12,9 +12,9 @@ async def test_falu(dut):
     
     await ClockCycles(dut.ui_in[2], 2, rising=True)
     # Reset interface
-    dut.rst_n.value = 0b1
-    await ClockCycles(dut.ui_in[2], 2, rising=True)
     dut.rst_n.value = 0b0
+    await ClockCycles(dut.ui_in[2], 2, rising=True)
+    dut.rst_n.value = 0b1
     
     # Master will was von dir!
     #dut.ui_in[1].value = 0b0
