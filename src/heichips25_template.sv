@@ -16,118 +16,118 @@ module heichips25_template (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-assign uo_out[7:1] = 7'b00000000; // Initialize outputs to zero
-assign uio_oe = 8'b00000000; // Disable all IOs
-assign uio_out = 8'b00000000; // Initialize IO outputs to zero
+  assign uo_out[7:1] = 7'b00000000;  // Initialize outputs to zero
+  assign uio_oe = 8'b00000000;  // Disable all IOs
+  assign uio_out = 8'b00000000;  // Initialize IO outputs to zero
 
-FALU_top falutop (
-    .clk(clk),
-    .reset(~rst_n),  // Active low reset
-    .start(ui_in[0]),  // Start signal from ui_in[0]
-    .wr(ui_in[1]),     // Write signal from ui_in[1]
-    //.i2c_clk(clk),  // I2C clock input
-    .i2c_clk(ui_in[2]),  // I2C clock input
-    .i2c_sda_i(ui_in[3]), // I2C data input
-    .i2c_sda_o(uo_out[0]) // I2C data output
-);
+  FALU_top falutop (
+      .clk(clk),
+      .reset(~rst_n),  // Active low reset
+      .start(ui_in[0]),  // Start signal from ui_in[0]
+      .wr(ui_in[1]),     // Write signal from ui_in[1]
+      //.i2c_clk(clk),  // I2C clock input
+      .i2c_clk(ui_in[2]),  // I2C clock input
+      .i2c_sda_i(ui_in[3]), // I2C data input
+      .i2c_sda_o(uo_out[0]) // I2C data output
+  );
 
 endmodule
 
 // FALU TOP START
-module FALU_top(
-    input wire clk,
-    input wire reset,
-    input wire start,
-    input wire wr,
-    input wire i2c_clk,
-    input wire i2c_sda_i,
+module FALU_top (
+    input  wire clk,
+    input  wire reset,
+    input  wire start,
+    input  wire wr,
+    input  wire i2c_clk,
+    input  wire i2c_sda_i,
     output wire i2c_sda_o
 );
 
-    // Top-level registers for final outputs
-    reg  signed [15:0] result;
-    reg                zero;
+  // Top-level registers for final outputs
+  reg signed  [15:0] result;
+  reg                zero;
 
-    reg                busy;
-    wire signed [15:0] data_in;
-    wire  [3:0]  op;
+  reg                busy;
+  wire signed [15:0] data_in;
+  wire        [ 3:0] op;
 
-    reg                divide;
-    reg  signed [7:0]  dividend;
-    reg  signed [7:0]  divisor;
-    wire signed [7:0]  quotient;
-    wire signed [7:0]  remainder;
-    wire               division_done;
-    wire               division_busy;
+  reg                divide;
+  reg signed  [ 7:0] dividend;
+  reg signed  [ 7:0] divisor;
+  wire signed [ 7:0] quotient;
+  wire signed [ 7:0] remainder;
+  wire               division_done;
+  wire               division_busy;
 
-    // ALU output wires
-    wire signed [15:0] alu_result;
-    wire               alu_zero;
-    reg [15:0] alu_data_in;
-    reg [3:0] alu_op;
-    ALU alu_inst (
-        .data_in(alu_data_in),
-        .op(alu_op),
-        .result(alu_result),
-        .zero(alu_zero),
-        .busy(busy)
-    );
+  // ALU output wires
+  wire signed [15:0] alu_result;
+  wire               alu_zero;
+  reg         [15:0] alu_data_in;
+  reg         [ 3:0] alu_op;
+  ALU alu_inst (
+      .data_in(alu_data_in),
+      .op(alu_op),
+      .result(alu_result),
+      .zero(alu_zero),
+      .busy(busy)
+  );
 
-    I2C_Controller i2c_inst (
-        .scl(i2c_clk),
-        .sda_i(i2c_sda_i),
-        .sda_o(i2c_sda_o),
-        .reset(reset),
-        .data_out(data_in),
-        .op(op),
-        .result(result), // top-level result is sent to I2C
-        .start(start),
-        .w_r(wr)
-    );
+  I2C_Controller i2c_inst (
+      .scl(i2c_clk),
+      .sda_i(i2c_sda_i),
+      .sda_o(i2c_sda_o),
+      .reset(reset),
+      .data_out(data_in),
+      .op(op),
+      .result(result),  // top-level result is sent to I2C
+      .start(start),
+      .w_r(wr)
+  );
 
-    divu_int div_inst (
-        .clk(clk),
-        .rst(reset),
-        .start(divide),
-        .busy(division_busy),
-        .done(division_done),
-        .valid(),
-        .dbz(),
-        .a(dividend),
-        .b(divisor),
-        .val(quotient),
-        .rem(remainder)
-    );
-    
-    always @(posedge clk) begin
-        if (reset) begin
-            result <= 0;
-            zero   <= 0;
-            divide <= 0;
-        end else begin
+  divu_int div_inst (
+      .clk(clk),
+      .rst(reset),
+      .start(divide),
+      .busy(division_busy),
+      .done(division_done),
+      .valid(),
+      .dbz(),
+      .a(dividend),
+      .b(divisor),
+      .val(quotient),
+      .rem(remainder)
+  );
 
-            if (op == 4'b1101) begin
-                // Division operation
-                divide   <= 1;
-                divisor  <= data_in[7]  ? -data_in[7:0]   : data_in[7:0];
-                dividend <= data_in[15] ? -data_in[15:8]  : data_in[15:8];
+  always @(posedge clk) begin
+    if (reset) begin
+      result <= 0;
+      zero   <= 0;
+      divide <= 0;
+    end else begin
 
-                if (division_done) begin
-                    divide <= 0;
-                    result[7:0]   <= (data_in[7] ^ data_in[15]) ? -quotient : quotient;
-                    result[15:8]  <= data_in[15] ? -remainder : remainder;
-                    zero          <= (quotient == 0);
-                end
-            end else begin
-                // Normal ALU operation
-                alu_data_in <= data_in;
-                alu_op      <= op;
-                result <= alu_result;
-                zero   <= alu_zero;
-                divide <= 0;
-            end
+      if (op == 4'b1101) begin
+        // Division operation
+        divide   <= 1;
+        divisor  <= data_in[7] ? -data_in[7:0] : data_in[7:0];
+        dividend <= data_in[15] ? -data_in[15:8] : data_in[15:8];
+
+        if (division_done) begin
+          divide       <= 0;
+          result[7:0]  <= (data_in[7] ^ data_in[15]) ? -quotient : quotient;
+          result[15:8] <= data_in[15] ? -remainder : remainder;
+          zero         <= (quotient == 0);
         end
+      end else begin
+        // Normal ALU operation
+        alu_data_in <= data_in;
+        alu_op      <= op;
+        result      <= alu_result;
+        zero        <= alu_zero;
+        divide      <= 0;
+      end
     end
+  end
 
 endmodule
 
@@ -365,63 +365,78 @@ endmodule
 
 // I2C Controller start
 
+
 module I2C_Controller (
-    input  wire scl,
-    input  wire sda_i,
-    input wire reset,
-    input reg [15:0] result,
-    input wire start,
-    input wire w_r,
-    output reg [15:0] data_out, 
-    output  reg [3:0]  op,
-	output  reg sda_o
+    input  wire        scl,
+    input  wire        sda_i,
+    input  wire        reset,
+    input  wire [15:0] result,
+    input  wire        start,
+    input  wire        w_r,        // 0 = write, 1 = read
+    output reg  [15:0] data_out, 
+    output reg  [3:0]  op,
+    output reg         sda_o
 );
-	
-	reg [4:0] counter = 0;
-    reg [1:0] state = 0;
-	reg [19:0] data_in = 0;
-   
-	
-	always @(posedge scl) begin
-		if (reset == 1) begin
-			state <= 0;
-			counter <= 0;
-			data_in <= 0;
-		end else begin
-			case(state)			
-				0: begin
-                  if (start == 1) begin
-                    if(w_r == 0) begin
-                        counter <= 19; 
-                        state <= 1;
+
+    // State encoding
+    localparam IDLE  = 2'b00;
+    localparam WRITE = 2'b01;
+    localparam READ  = 2'b10;
+    localparam LATCH = 2'b11;
+
+    reg [1:0] state = IDLE;
+    reg [4:0] counter = 0;
+    reg [19:0] data_in = 0;
+
+    always @(posedge scl) begin
+        if (reset) begin
+            state <= IDLE;
+            counter <= 0;
+            data_in <= 0;
+            sda_o <= 0;
+        end else begin
+            case(state)
+                IDLE: begin
+                    if (start) begin
+                        if (w_r == 0) begin
+                            // Write operation
+                            counter <= 19;   // 20 bits to write
+                            state <= WRITE;
+                        end else begin
+                            // Read operation
+                            counter <= 15;   // 16 bits to read
+                            state <= READ;
+                        end
                     end
-                    else begin
-                        counter <= 16;
-                        state <= 2;
-                    end
-                  end
-				end
-				1: begin
-					data_in[counter] <= sda_i;
-					if(counter == 0) begin
-						state <= 3;
-					end else counter <= counter - 1;
-				end
-				2: begin
-					if(counter == 0) state <= 0;
-					else begin 
-                    sda_o <= result[counter-1];
-					counter <= counter - 1;
-                end	
                 end
-                  3: begin
-					state <= 0;	
-                   op <= data_in[19:16];
+
+                // Write from master to slave
+                WRITE: begin
+                    data_in[counter] <= sda_i;
+                    if (counter == 0)
+                        state <= LATCH;   // Latch data
+                    else
+                        counter <= counter - 1;
+                end
+
+                // Read from slave to master
+                READ: begin
+                    sda_o <= result[counter - 1]; // Output current bit
+                    if (counter > 1)
+                        counter <= counter - 1;
+                    else
+                        state <= IDLE;    // Last bit sent, go IDLE
+                end
+
+                // Latch received data and ops
+                LATCH: begin
+                    op <= data_in[19:16];
                     data_out <= data_in[15:0];
-            	end				
-			endcase
-		end
-	end
+                    state <= IDLE;
+                end
+            endcase
+        end
+    end
 endmodule
 
 // I2C Controller end
@@ -430,73 +445,73 @@ endmodule
 // DIV START
 
 
-module divu_int ( 
-    input wire logic clk,              // clock
-    input wire logic rst,              // reset
-    input wire logic start,            // start calculation
-    output     logic busy,             // calculation in progress
-    output     logic done,             // calculation is complete (high for one tick)
-    output     logic valid,            // result is valid
-    output     logic dbz,              // divide by zero
-    input wire logic [7:0] a,    // dividend (numerator)
-    input wire logic [7:0] b,    // divisor (denominator)
-    output     logic [7:0] val,  // result value: quotient
-    output     logic [7:0] rem   // result: remainder
-    );
+module divu_int (
+    input  wire logic       clk,    // clock
+    input  wire logic       rst,    // reset
+    input  wire logic       start,  // start calculation
+    output logic            busy,   // calculation in progress
+    output logic            done,   // calculation is complete (high for one tick)
+    output logic            valid,  // result is valid
+    output logic            dbz,    // divide by zero
+    input  wire logic [7:0] a,      // dividend (numerator)
+    input  wire logic [7:0] b,      // divisor (denominator)
+    output logic      [7:0] val,    // result value: quotient
+    output logic      [7:0] rem     // result: remainder
+);
 
-    logic [7:0] b1;             // copy of divisor
-    logic [7:0] quo, quo_next;  // intermediate quotient
-    logic [8:0] acc, acc_next;    // accumulator (1 bit wider)
-    logic [$clog2(8)-1:0] i;      // iteration counter
+  logic [7:0] b1;  // copy of divisor
+  logic [7:0] quo, quo_next;  // intermediate quotient
+  logic [8:0] acc, acc_next;  // accumulator (1 bit wider)
+  logic [$clog2(8)-1:0] i;  // iteration counter
 
-    // division algorithm iteration
-    always_comb begin
-        if (acc >= {1'b0, b1}) begin
-            acc_next = acc - b1;
-            {acc_next, quo_next} = {acc_next[7:0], quo, 1'b1};
-        end  else begin
-            {acc_next, quo_next} = {acc, quo} << 1;
-        end
+  // division algorithm iteration
+  always_comb begin
+    if (acc >= {1'b0, b1}) begin
+      acc_next = acc - b1;
+      {acc_next, quo_next} = {acc_next[7:0], quo, 1'b1};
+    end else begin
+      {acc_next, quo_next} = {acc, quo} << 1;
     end
+  end
 
-    // calculation control
-    always_ff @(posedge clk) begin
-        done <= 0;
-        if (start) begin
-            valid <= 0;
-            i <= 0;
-            if (b == 0) begin  // catch divide by zero
-                busy <= 0;
-                done <= 1;
-                dbz <= 1;
-            end else begin
-                busy <= 1;
-                dbz <= 0;
-                b1 <= b;
-                {acc, quo} <= {{8{1'b0}}, a, 1'b0};  // initialize calculation
-            end
-        end else if (busy) begin
-            if (i == 7) begin  // we're done
-                busy <= 0;
-                done <= 1;
-                valid <= 1;
-                val <= quo_next;
-                rem <= acc_next[8:1];  // undo final shift
-            end else begin  // next iteration
-                i <= i + 1;
-                acc <= acc_next;
-                quo <= quo_next;
-            end
-        end 
-        if (rst) begin
-            busy <= 0;
-            done <= 0;
-            valid <= 0;
-            dbz <= 0;
-            val <= 0;
-            rem <= 0;
-        end
+  // calculation control
+  always_ff @(posedge clk) begin
+    done <= 0;
+    if (start) begin
+      valid <= 0;
+      i <= 0;
+      if (b == 0) begin  // catch divide by zero
+        busy <= 0;
+        done <= 1;
+        dbz  <= 1;
+      end else begin
+        busy <= 1;
+        dbz <= 0;
+        b1 <= b;
+        {acc, quo} <= {{8{1'b0}}, a, 1'b0};  // initialize calculation
+      end
+    end else if (busy) begin
+      if (i == 7) begin  // we're done
+        busy  <= 0;
+        done  <= 1;
+        valid <= 1;
+        val   <= quo_next;
+        rem   <= acc_next[8:1];  // undo final shift
+      end else begin  // next iteration
+        i   <= i + 1;
+        acc <= acc_next;
+        quo <= quo_next;
+      end
     end
+    if (rst) begin
+      busy  <= 0;
+      done  <= 0;
+      valid <= 0;
+      dbz   <= 0;
+      val   <= 0;
+      rem   <= 0;
+    end
+  end
 endmodule
 
 // DIV END
