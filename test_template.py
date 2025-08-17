@@ -21,16 +21,20 @@ async def test_falu(dut):
     dut.rst_n.value = 1
 
     # Initiate a write operation
+    # .start(ui_in[0]),  // Start signal from ui_in[0]
+    # .wr(ui_in[1]),     // Write signal from ui_in[1]
+    # .i2c_clk(ui_in[2]),  // I2C clock input
     await ClockCycles(dut.ui_in[2], 1, rising=True)
     dut.ui_in[1].value = 0  # Write mode
     dut.ui_in[0].value = 1  # Raise start signal
     await ClockCycles(dut.ui_in[2], 2, rising=True)
-    dut.ui_in[0].value = 0  # Lower start signal
+    dut.ui_in[1].value = 0  # Lower start signal
+    dut.ui_in[0].value = 0  # Write mode
 
     # Prepare data: [opcode(4 bits), a(8 bits), b(8 bits)]
     ops = 0b0100
-    a = 0b11011101
-    b = 0b11001000
+    a = 0b11111111
+    b = 0b01010101
     data_in = (ops << 16) | (a << 8) | b
 
     # Send data serially over ui_in[3]
@@ -42,7 +46,7 @@ async def test_falu(dut):
     await ClockCycles(dut.clk, 1, rising=True)
     dut.ui_in[1].value = 1  # Read mode
     dut.ui_in[0].value = 1  # Raise start signal
-    await ClockCycles(dut.clk, 1, rising=True)
+    await ClockCycles(dut.clk, 2, rising=True)
     dut.ui_in[0].value = 0  # Lower start signal
     dut.ui_in[1].value = 0  # Clear read signal
 
