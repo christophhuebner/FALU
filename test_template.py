@@ -15,19 +15,19 @@ async def test_falu(dut):
     await cocotb.start(i2c_clk.start())
     
     # Reset DUT
-    await ClockCycles(dut.ui_in[2], 2, rising=True)
+    await ClockCycles(dut.clk, 2, rising=True)
     dut.rst_n.value = 0
-    await ClockCycles(dut.ui_in[2], 2, rising=True)
+    await ClockCycles(dut.clk, 2, rising=True)
     dut.rst_n.value = 1
 
     # Initiate a write operation
     # .start(ui_in[0]),  // Start signal from ui_in[0]
     # .wr(ui_in[1]),     // Write signal from ui_in[1]
     # .i2c_clk(ui_in[2]),  // I2C clock input
-    await ClockCycles(dut.ui_in[2], 1, rising=True)
+    await ClockCycles(dut.clk, 1, rising=True)
     dut.ui_in[1].value = 0  # Write mode
     dut.ui_in[0].value = 1  # Raise start signal
-    await ClockCycles(dut.ui_in[2], 2, rising=True)
+    await ClockCycles(dut.clk, 1, rising=True)
     dut.ui_in[1].value = 0  # Lower start signal
     dut.ui_in[0].value = 0  # Write mode
 
@@ -46,7 +46,7 @@ async def test_falu(dut):
     await ClockCycles(dut.clk, 1, rising=True)
     dut.ui_in[1].value = 1  # Read mode
     dut.ui_in[0].value = 1  # Raise start signal
-    await ClockCycles(dut.clk, 2, rising=True)
+    await ClockCycles(dut.clk, 1, rising=True)
     dut.ui_in[0].value = 0  # Lower start signal
     dut.ui_in[1].value = 0  # Clear read signal
 

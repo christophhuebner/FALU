@@ -397,6 +397,8 @@ module I2C_Controller (
         end else begin
             case(state)
                 IDLE: begin
+                    counter <= 0;
+                    state <= IDLE;
                     if (start) begin
                         if (w_r == 0) begin
                             // Write operation
