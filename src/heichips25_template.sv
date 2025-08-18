@@ -194,7 +194,7 @@ module ALU (
     op_sel = alu_op_t'(op);
 
     case (op_sel)
-
+    
       //MAC operation
       OP_MAC: result = data_in[15:12] * data_in[11:8] + {8'b0, data_in[7:0]};
 

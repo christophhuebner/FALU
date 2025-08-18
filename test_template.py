@@ -15,7 +15,7 @@ async def test_falu(dut):
     await cocotb.start(i2c_clk.start())
     
 
-    for ops in [0b0011, 0b0000, 0b0010]: # OR ADD AND
+    for ops in [0b0011, 0b0000, 0b0010, 0b1010]: # OR ADD AND
         # Reset DUT
         await ClockCycles(dut.clk, 2, rising=True)
         dut.rst_n.value = 0
