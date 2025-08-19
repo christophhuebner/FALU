@@ -140,7 +140,7 @@ module ALU (
     input wire signed [15:0] data_in,  // First operand
     input wire [3:0] op,  // Operation selector
     output reg signed [15:0] result,
-    output wire zero,  // Zero flag
+    output reg zero,  // Zero flag
     output wire busy
 );
 
@@ -189,8 +189,6 @@ module ALU (
 
   always_comb begin : ALU_ops
 
-    zero   = '0;
-    result = '0;
     op_sel = alu_op_t'(op);
 
     case (op_sel)
@@ -257,7 +255,9 @@ module ALU (
     endcase  // op_sel
 
     if (result == 0) begin
-      zero = 1;
+      zero <= 1;
+    end else begin
+      zero <= 0;
     end
 
   end  // ALU_Ops
