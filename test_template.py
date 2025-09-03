@@ -6,7 +6,7 @@ from cocotb.clock import Clock
 async def async_falucinator(dut):
     """The ultimate FALU operation commander!"""
     
-    for ops in [0b0011, 0b0000, 0b0010, 0b1010]:  # OR, NOP, AND, XOR
+    for ops in [0b0011, 0b0000, 0b0010, 0b1010]:  # OR, ADD, AND, SORT
         # Reset DUT
         await ClockCycles(dut.clk, 2, rising=True)
         dut.rst_n.value = 0
