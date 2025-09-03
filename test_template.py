@@ -8,9 +8,9 @@ async def async_falucinator(dut):
     
     for ops in [0b1010, 0b0000, 0b0010, 0b0011, 0b1111, 0b1110, 0b1000]: 
         # Reset DUT
-        await ClockCycles(dut.clk, 2, rising=True)
+        await ClockCycles(dut.clk, 1, rising=True)
         dut.rst_n.value = 0
-        await ClockCycles(dut.clk, 2, rising=True)
+        await ClockCycles(dut.clk, 1, rising=True)
         dut.rst_n.value = 1
 
         # Initiate a write operation
@@ -53,7 +53,7 @@ async def async_falucinator(dut):
         dut._log.info(f"Ops {ops:04b} -> Output: {output_data} (length {len(output_data)})")
 
         # Small delay before next op
-        await ClockCycles(dut.clk, 5, rising=True)
+        await ClockCycles(dut.clk, 1, rising=True)
 
 
 # -------------------------------
