@@ -498,8 +498,8 @@ module I2C_Controller (
 
                 // Read from slave to master
                 READ: begin
-                    sda_o <= result[counter - 1]; // Output current bit
-                    if (counter > 1)
+                    sda_o <= result[counter]; // Output current bit
+                    if (counter >= 1)
                         counter <= counter - 1;
                     else
                         state <= IDLE;    // Last bit sent, go IDLE
