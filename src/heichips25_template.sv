@@ -255,9 +255,9 @@ module ALU (
     endcase  // op_sel
 
     if (result == 0) begin
-      zero <= 1;
+      zero = 1;
     end else begin
-      zero <= 0;
+      zero = 0;
     end
 
   end  // ALU_Ops

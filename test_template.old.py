@@ -35,8 +35,8 @@ async def test_falu(dut):
 
         # Prepare data: [opcode(4 bits), a(8 bits), b(8 bits)]
         #ops = 0b0011
-        a = 0b01111111
-        b = 0b11010101
+        a = 0b0111_1111
+        b = 0b1101_0101
         data_in = (ops << 16) | (a << 8) | b
 
         # Send data serially over ui_in[3]
