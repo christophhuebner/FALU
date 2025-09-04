@@ -25,8 +25,8 @@ module heichips25_template (
       .reset(~rst_n),  // Active low reset
       .start(ui_in[0]),  // Start signal from ui_in[0]
       .wr(ui_in[1]),     // Write signal from ui_in[1]
-      //.i2c_clk(clk),  // I2C clock input
-      .i2c_clk(ui_in[2]),  // I2C clock input
+      .i2c_clk(clk),  // I2C clock input
+      //.i2c_clk(ui_in[2]),  // I2C clock input
       .i2c_sda_i(ui_in[3]), // I2C data input
       .i2c_sda_o(uo_out[0]) // I2C data output
   );
