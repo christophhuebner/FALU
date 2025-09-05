@@ -27,14 +27,14 @@ FALU (Fancy ALU) is a **custom-designed Arithmetic Logic Unit** implemented in V
 | ✅     | 0101   | NAND                       | `~(a & b)` |
 | ✅     | 0110   | NOR                        | `~(a \| b)` |
 | ✅     | 0111   | XNOR                       | `~(a ^ b)` |
-| ✅     | 1000   | CLZ(x)                     | Count leading zeros |
+| ✅     | 1000   | CLZ                     | Count leading zeros |
 | ✅     | 1001   | MAC                        | Multiply–Accumulate |
-| ✅     | 1010   | Sort(x)                    | Sort bits/bytes (impl-specific) |
-| ✅     | 1011   | Approximate log(x)         | Fast log estimation |
-| ✅     | 1100   | CTZ(x)                     | Count trailing zeros |
-| ✅     | 1101   | Division(x)                | Integer division |
-| ✅     | 1110   | Multiplication(x)          | `a * b` |
-| ✅     | 1111   | Hamming Distance/Weight(x) | Bit population count |
+| ✅     | 1010   | Sort                    | Sort bits/bytes (impl-specific) |
+| ✅     | 1011   | Approximate log         | Fast log estimation |
+| ✅     | 1100   | CTZ                     | Count trailing zeros |
+| ✅     | 1101   | Division                | Integer division |
+| ✅     | 1110   | Multiplication          | `a * b` |
+| ✅     | 1111   | Hamming Distance/Weight | Bit population count |
 
 ---
 
