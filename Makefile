@@ -1,27 +1,26 @@
-.PHONY: adiv alu falu librelane clean
+all: macro copy-final
 
-div:
-	make -f div_test.mk
+PDK_ROOT ?= ~/.ciel
+PDK ?= ihp-sg13g2
 
-alu:
-	make -f alu_test.mk
+RUN_TAG = $(shell ls librelane/runs/ -1 | tail -n 1)
 
-falu:
-	make -f falu_test.mk
+# Macro - LibreLane
 
-librelane-macro:
-	make -f make_libre.mk macro
+macro:
+	cd librelane; librelane config.yaml --pdk $(PDK)
+.PHONY: macro
 
-librelane-macro-openroad:
-	make -f make_libre.mk macro-openroad
+macro-openroad:
+	cd librelane; librelane config.yaml --pdk $(PDK) --last-run --flow OpenInOpenROAD
+.PHONY: macro-openroad
 
-librelane-macro-final:
-	make -f make_libre.mk macro copy-final
+macro-klayout:
+	cd librelane; librelane config.yaml --pdk $(PDK) --last-run --flow OpenInKLayout
+.PHONY: macro-klayout
 
-i2c:
-	make -f i2c_test.mk
-clean:
-	make -f div_test.mk clean
-	make -f alu_test.mk clean
-	make -f falu_test.mk clean
-	make -f make_libre.mk clean
+copy-macro:
+	mkdir -p macro/
+	rm -rf macro/*
+	cp -r librelane/runs/${RUN_TAG}/final/* macro/
+.PHONY: copy-macro
